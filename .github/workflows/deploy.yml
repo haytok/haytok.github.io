@@ -24,6 +24,7 @@ jobs:
         with:
           submodules: true  # Fetch Hugo themes
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          token: ${{secrets.GITHUB_TOKEN}}
 
       # OGP の作成
       - name: Setup Python
