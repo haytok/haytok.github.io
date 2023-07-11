@@ -1,0 +1,50 @@
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{ hugo.Generator }}
+    {{ partial "metatitle" . }}
+    {{ partial "metadesc" . }}
+
+    {{ with .Site.Params.FaviconImg }}
+    <link rel="shortcut icon" href="{{.}}">
+    {{ end }}
+
+    {{ partial "style" . }}
+
+    {{ range .Site.Params.CustomCSS }}
+    <link rel="stylesheet" href="{{ . }}"/>
+    {{ end }}
+
+    <link  rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono|Lato|Raleway">
+
+    {{ if .Site.Params.HighlightJs }}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/{{- .Site.Params.HighlightJsStyle -}}.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    {{ range .Site.Params.HighlightJsLanguages }}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/{{- . -}}.min.js"></script>
+    {{ end }}
+    {{ end }}
+
+    {{ template "_internal/opengraph.html" . }}
+    <!-- {{ template "_internal/twitter_cards.html" . }} -->
+
+    <!-- OGP の設定 -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@bilmnpvovqnmlid" />
+    <meta name="twitter:creator" content="@bilmnpvovqnmlid" />
+    {{ if .Params.ogimage }}
+    <meta property="twitter:image" content="{{ .Site.BaseURL }}{{ .Params.ogimage }}">
+    {{ else }}
+    <meta property="twitter:image" content="{{ .Site.BaseURL }}img/images/kiwata_partly.png">
+    {{ end }}
+    <meta property="og:title" content="{{ .Title }}" />
+    <meta property="og:url" content="{{ .Permalink }}" />
+    {{ if .Params.ogimage }}
+    <meta property="og:image" content="{{ .Site.BaseURL }}{{ .Params.ogimage }}">
+    {{ else }}
+    <meta property="og:image" content="{{ .Site.BaseURL }}img/images/kiwata_partly.png">
+    {{ end }}
+    <meta property="og:description" content="{{ .Description }}" />
+
+    {{ template "_internal/google_analytics.html" . }}
+</head>
