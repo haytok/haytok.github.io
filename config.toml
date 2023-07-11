@@ -1,4 +1,4 @@
-baseURL = "https://haytok.jp/"
+baseURL = "https://haytok.github.io"
 title = "haytok's Website"
 theme = "manis-hugo-theme"
 publishDir = "docs"
