@@ -66,4 +66,4 @@ build:
 		-v /etc/passwd:/etc/passwd:ro \
 		-v $(PWD):/src \
 		-u $(USER_ID):$(GROUP_ID) \
-		klakegg/hugo:$(VERSION) build
+		klakegg/hugo:$(VERSION)
