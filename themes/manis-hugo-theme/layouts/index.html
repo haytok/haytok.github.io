@@ -4,7 +4,8 @@
 		{{ partial "title" . }}
 		{{ with .Content }}{{.}}{{ end }}
 	</header>
-	{{ $latestcount := .Site.Params.LatestCount | default 3 }}
+
+	<!-- {{ $latestcount := .Site.Params.LatestCount | default 3 }}
 	<section>
 		<h4>{{ T "latestPost" }}</h4>
 		<ul class="no-bullet">
@@ -13,7 +14,7 @@
 			{{ partial "li" . }}
 			{{- end -}}
 		</ul>
-	</section>
+	</section> -->
 
 	<!-- 追加 : お気に入りの投稿を表示する -->
 	{{ $pages := where (where site.RegularPages "Type" "in" site.Params.mainSections) "Params.pinned" "==" true }}
