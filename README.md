@@ -1,4 +1,4 @@
-# hakiwata
+# [haytok.github.io](haytok.github.io)
 
 - これは、Hugo + GitHub Pages で作成した[自作ブログ](https://haytok.jp/)のソースコードです。開発環境は Docker を使用しています。
 
