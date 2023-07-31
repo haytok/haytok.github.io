@@ -5,7 +5,10 @@ date = "2021-04-30T00:00:00+08:00"
 
 ## Experience
 
-- April 2022 ~ Present
+- August 2023 ~ Present
+  - Cloud Support Engineer at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)
+
+- April 2022 ~ July 2023
   - Cloud Support Associate at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)
 
 ## Education
