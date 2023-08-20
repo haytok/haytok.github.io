@@ -13,7 +13,7 @@ date = "2021-04-30T00:00:00+08:00"
 
 ## Works
 
-#### Contributions [KubeArmor](https://github.com/kubearmor/KubeArmor)
+#### Contributions to [KubeArmor](https://github.com/kubearmor/KubeArmor)
 
 - [fix(monitor): fix UpdateNsKeyMap and DestroyBPFMaps functions by haytok · Pull Request #1264 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1264)
 - [fix(CI): add the job to run go test on the KubeArmor/KubeArmor directory by haytok · Pull Request #1267 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1267)
