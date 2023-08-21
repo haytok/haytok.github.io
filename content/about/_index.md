@@ -11,14 +11,6 @@ date = "2021-04-30T00:00:00+08:00"
 - April 2022 ~ July 2023
   - Cloud Support Associate at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)
 
-## Works
-
-#### Contributions to [KubeArmor](https://github.com/kubearmor/KubeArmor)
-
-- [fix(monitor): fix UpdateNsKeyMap and DestroyBPFMaps functions by haytok · Pull Request #1264 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1264)
-- [fix(CI): add the job to run go test on the KubeArmor/KubeArmor directory by haytok · Pull Request #1267 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1267)
-- [docs(fix typo): fix sample commands to get alerts for policies and te… by haytok · Pull Request #1362 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1362)
-
 ## Education
 
 - April 2020 ~ March 2022
@@ -29,6 +21,14 @@ date = "2021-04-30T00:00:00+08:00"
 - April 2016 ~ March 2020
   - School of Engineering at [Osaka University](https://www.osaka-u.ac.jp/)
     - Division of Electronic and Information Engineering
+
+## Works
+
+#### Contributions to [KubeArmor](https://github.com/kubearmor/KubeArmor)
+
+- [fix(monitor): fix UpdateNsKeyMap and DestroyBPFMaps functions by haytok · Pull Request #1264 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1264)
+- [fix(CI): add the job to run go test on the KubeArmor/KubeArmor directory by haytok · Pull Request #1267 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1267)
+- [docs(fix typo): fix sample commands to get alerts for policies and te… by haytok · Pull Request #1362 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1362)
 
 ## Publications
 
