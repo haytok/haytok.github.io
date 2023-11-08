@@ -24,6 +24,10 @@ date = "2021-04-30T00:00:00+08:00"
 
 ## Works
 
+#### Contributions to [finch](https://github.com/runfinch/finch)
+
+- [fix: Fix to remove the virtual machine storage in deps/finch-core/dow… by haytok · Pull Request #685 · runfinch/finch](https://github.com/runfinch/finch/pull/685)
+
 #### Contributions to [KubeArmor](https://github.com/kubearmor/KubeArmor)
 
 - [fix(monitor): fix UpdateNsKeyMap and DestroyBPFMaps functions by haytok · Pull Request #1264 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1264)
