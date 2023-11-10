@@ -35,6 +35,7 @@ date = "2021-04-30T00:00:00+08:00"
 - [docs(fix typo): fix sample commands to get alerts for policies and te… by haytok · Pull Request #1362 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1362)
 - [fix(core): fix to prevent policies from being applied to containers t… by haytok · Pull Request #1406 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1406)
 - [fix(core): fix so that it can be restricted to matched paths and dire… by haytok · Pull Request #1461 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1461)
+- [fix(monitor): Added handling when casting a type in SystemMonitor fails by haytok · Pull Request #1472 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1472)
 
 ## Publications
 
