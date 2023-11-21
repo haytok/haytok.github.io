@@ -24,11 +24,15 @@ date = "2021-04-30T00:00:00+08:00"
 
 ## Works
 
-#### Contributions to [finch](https://github.com/runfinch/finch)
+#### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok)
 
 - [fix: Fix to remove the virtual machine storage in deps/finch-core/dow… by haytok · Pull Request #685 · runfinch/finch](https://github.com/runfinch/finch/pull/685)
 
-#### Contributions to [KubeArmor](https://github.com/kubearmor/KubeArmor)
+#### Contributions to [runfinch/common-tests](https://github.com/runfinch/common-tests/commits?author=haytok)
+
+- [test: Add a test for --ssh option in finch build command by haytok · Pull Request #101 · runfinch/common-tests](https://github.com/runfinch/common-tests/pull/101)
+
+#### Contributions to [kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/commits?author=haytok)
 
 - [fix(monitor): fix UpdateNsKeyMap and DestroyBPFMaps functions by haytok · Pull Request #1264 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1264)
 - [fix(CI): add the job to run go test on the KubeArmor/KubeArmor directory by haytok · Pull Request #1267 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1267)
