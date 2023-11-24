@@ -27,6 +27,7 @@ date = "2021-04-30T00:00:00+08:00"
 #### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok)
 
 - [fix: Fix to remove the virtual machine storage in deps/finch-core/dow… by haytok · Pull Request #685 · runfinch/finch](https://github.com/runfinch/finch/pull/685)
+- [fix: Fix to be able to run finch build with --ssh option by haytok · Pull Request #696 · runfinch/finch](https://github.com/runfinch/finch/pull/696)
 
 #### Contributions to [runfinch/common-tests](https://github.com/runfinch/common-tests/commits?author=haytok)
 
