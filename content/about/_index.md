@@ -5,35 +5,33 @@ date = "2021-04-30T00:00:00+08:00"
 
 ## Experience
 
-- August 2023 ~ Present
-  - Cloud Support Engineer at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)
+#### WORK EXPERIENCE
 
-- April 2022 ~ July 2023
-  - Cloud Support Associate at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)
+- **August 2023 ~ Present** : **Cloud Support Engineer at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)**
+  - When AWS Support receives customer inquiries, I reproduce the problem, identify the root cause, and provide the solutions. I support cases mainly about `RDS for MySQL` and `Aurora MySQL`.
 
-## Education
+- **April 2022 ~ July 2023** : **Cloud Support Associate at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)**
 
-- April 2020 ~ March 2022
-  - Graduate School of Engineering at [Osaka University](https://www.osaka-u.ac.jp/)
-    - Division of Electrical, Electronic, and Infocommunications Engineering
-    - Member of [Inoue Lab](http://opt.comm.eng.osaka-u.ac.jp)
+---
 
-- April 2016 ~ March 2020
-  - School of Engineering at [Osaka University](https://www.osaka-u.ac.jp/)
-    - Division of Electronic and Information Engineering
+- **October 2019 ~ May 2020** : **Software Development Engineer at [Artill Corporation](https://artill.jp/?en)**
+  - I worked on developing a web application for buying and selling artwork, developing the frontend using `React` and building the development environment using `Docker` and `docker-compose`.
 
-## Works
+- **May 2017 ~ April 2019** : **Software Development Engineer at [Osaka University Coop](https://www.osaka-univ.coop/)**
+<!--  - By receiving orders from Osaka University, I created some web applications (EC site etc) which are only accessed in the network of the university. Most of the web application were developed by team, but a few were developed by myself. They areI developed with `Angular 2` and `Django REST framework`. I was in charge of both the frontend and the backend. I also designed a DB scheme and did some tuning for `PostgreSQL`.-->
 
-#### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok)
+#### OSS EXPERIENCE
+
+##### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok)
 
 - [fix: Fix to remove the virtual machine storage in deps/finch-core/dow… by haytok · Pull Request #685 · runfinch/finch](https://github.com/runfinch/finch/pull/685)
 - [fix: Fix to be able to run finch build with --ssh option by haytok · Pull Request #696 · runfinch/finch](https://github.com/runfinch/finch/pull/696)
 
-#### Contributions to [runfinch/common-tests](https://github.com/runfinch/common-tests/commits?author=haytok)
+##### Contributions to [runfinch/common-tests](https://github.com/runfinch/common-tests/commits?author=haytok)
 
 - [test: Add a test for --ssh option in finch build command by haytok · Pull Request #101 · runfinch/common-tests](https://github.com/runfinch/common-tests/pull/101)
 
-#### Contributions to [kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/commits?author=haytok)
+##### Contributions to [kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/commits?author=haytok)
 
 - [fix(monitor): fix UpdateNsKeyMap and DestroyBPFMaps functions by haytok · Pull Request #1264 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1264)
 - [fix(CI): add the job to run go test on the KubeArmor/KubeArmor directory by haytok · Pull Request #1267 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1267)
@@ -41,6 +39,15 @@ date = "2021-04-30T00:00:00+08:00"
 - [fix(core): fix to prevent policies from being applied to containers t… by haytok · Pull Request #1406 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1406)
 - [fix(core): fix so that it can be restricted to matched paths and dire… by haytok · Pull Request #1461 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1461)
 - [fix(monitor): Added handling when casting a type in SystemMonitor fails by haytok · Pull Request #1472 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1472)
+
+## Education
+
+- **April 2020 ~ March 2022** : **Graduate School of Engineering at [Osaka University](https://www.osaka-u.ac.jp/)**
+  - Division of Electrical, Electronic, and Infocommunications Engineering
+  - Member of [Inoue Lab](http://opt.comm.eng.osaka-u.ac.jp)
+
+- **April 2016 ~ March 2020** : **School of Engineering at [Osaka University](https://www.osaka-u.ac.jp/)**
+  - Division of Electronic and Information Engineering
 
 ## Publications
 
@@ -54,7 +61,7 @@ date = "2021-04-30T00:00:00+08:00"
 
 ## Interests
 
-- Linux kernel | Container | Python | C | Web Application Programming
+- Linux kernel | Container | Python | Golang | C | Web Application Programming | Low Level Programming
 
 ## Others
 
