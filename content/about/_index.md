@@ -8,17 +8,16 @@ date = "2021-04-30T00:00:00+08:00"
 #### WORK EXPERIENCE
 
 - **August 2023 ~ Present** : **Cloud Support Engineer at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)**
-  - When AWS Support receives customer inquiries, I reproduce the problem, identify the root cause, and provide the solutions. I support cases mainly about `RDS for MySQL` and `Aurora MySQL`.
-
+  - When AWS Support receive customer inquiries, I reproduce the problem, identify the root cause, and provide the solutions. I primarily provide technical support for products such as `RDS for MySQL` and `Aurora MySQL`.
 - **April 2022 ~ July 2023** : **Cloud Support Associate at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)**
 
 ---
 
 - **October 2019 ~ May 2020** : **Software Development Engineer at [Artill Corporation](https://artill.jp/?en)**
-  - I worked on developing a web application for buying and selling artwork, developing the frontend using `React` and building the development environment using `Docker` and `docker-compose`.
+  - I worked on the development of a web application for buying and selling artwork. Specifically, I worked on front-end development using `React` and building a development environment using `Docker` and `docker-compose`.
 
 - **May 2017 ~ April 2019** : **Software Development Engineer at [Osaka University Coop](https://www.osaka-univ.coop/)**
-<!--  - By receiving orders from Osaka University, I created some web applications (EC site etc) which are only accessed in the network of the university. Most of the web application were developed by team, but a few were developed by myself. They areI developed with `Angular 2` and `Django REST framework`. I was in charge of both the frontend and the backend. I also designed a DB scheme and did some tuning for `PostgreSQL`.-->
+  - When received orders from Osaka University, I created web applications (EC sites, etc.) such as the [Osaka University Foundation for the Future](https://donation.miraikikin.osaka-u.ac.jp/osaka-u/entry.php?continueKind=0&paymentCode=1&supportCode=) and the on-campus goods procurement system. The development of the web application was carried out by a team. In the projects I was in charge of, I mainly developed web applications using `Angular 2` and the `Django REST framework`. I was responsible for both front-end and back-end development during the project. I also designed the DB scheme and did the `PostgreSQL` tuning.
 
 #### OSS EXPERIENCE
 
