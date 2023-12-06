@@ -5,20 +5,6 @@ date = "2021-04-30T00:00:00+08:00"
 
 ## Experience
 
-#### WORK EXPERIENCE
-
-- **August 2023 ~ Present** : **Cloud Support Engineer at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)**
-  - When AWS Support receive customer inquiries, I reproduce the problem, identify the root cause, and provide the solutions. I primarily provide technical support for products such as `RDS for MySQL` and `Aurora MySQL`.
-- **April 2022 ~ July 2023** : **Cloud Support Associate at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)**
-
----
-
-- **October 2019 ~ May 2020** : **Software Development Engineer at [Artill Corporation](https://artill.jp/?en)**
-  - I worked on the development of a web application for buying and selling artwork. Specifically, I worked on front-end development using `React` and building a development environment using `Docker` and `docker-compose`.
-
-- **May 2017 ~ April 2019** : **Software Development Engineer at [Osaka University Coop](https://www.osaka-univ.coop/)**
-  - When received orders from Osaka University, I created web applications (EC sites, etc.) such as the [Osaka University Foundation for the Future](https://donation.miraikikin.osaka-u.ac.jp/osaka-u/entry.php?continueKind=0&paymentCode=1&supportCode=) and the on-campus goods procurement system. The development of the web application was carried out by a team. In the projects I was in charge of, I mainly developed web applications using `Angular 2` and the `Django REST framework`. I was responsible for both front-end and back-end development during the project. I also designed the DB scheme and did the `PostgreSQL` tuning.
-
 #### OSS EXPERIENCE
 
 ##### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok)
@@ -39,6 +25,20 @@ date = "2021-04-30T00:00:00+08:00"
 - [fix(core): fix to prevent policies from being applied to containers t… by haytok · Pull Request #1406 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1406)
 - [fix(core): fix so that it can be restricted to matched paths and dire… by haytok · Pull Request #1461 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1461)
 - [fix(monitor): Added handling when casting a type in SystemMonitor fails by haytok · Pull Request #1472 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1472)
+
+#### WORK EXPERIENCE
+
+- **August 2023 ~ Present** : **Cloud Support Engineer at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)**
+  - When AWS Support receive customer inquiries, I reproduce the problem, identify the root cause, and provide the solutions. I primarily provide technical support for products such as `RDS for MySQL` and `Aurora MySQL`.
+- **April 2022 ~ July 2023** : **Cloud Support Associate at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)**
+
+---
+
+- **October 2019 ~ May 2020** : **Software Development Engineer at [Artill Corporation](https://artill.jp/?en)**
+  - I worked on the development of a web application for buying and selling artwork. Specifically, I worked on front-end development using `React` and building a development environment using `Docker` and `docker-compose`.
+
+- **May 2017 ~ April 2019** : **Software Development Engineer at [Osaka University Coop](https://www.osaka-univ.coop/)**
+  - When received orders from Osaka University, I created web applications (EC sites, etc.) such as the [Osaka University Foundation for the Future](https://donation.miraikikin.osaka-u.ac.jp/osaka-u/entry.php?continueKind=0&paymentCode=1&supportCode=) and the on-campus goods procurement system. The development of the web application was carried out by a team. In the projects I was in charge of, I mainly developed web applications using `Angular 2` and the `Django REST framework`. I was responsible for both front-end and back-end development during the project. I also designed the DB scheme and did the `PostgreSQL` tuning.
 
 ## Education
 
