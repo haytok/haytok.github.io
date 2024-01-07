@@ -7,6 +7,10 @@ pinned: false
 ogimage: "img/images/202401.png"
 ---
 
+## 2024/01/06 (Sat)
+
+- Solved `1 questions` in [exercism](https://exercism.org/) using Golang.
+
 ## 2024/01/05 (Fri)
 
 - Solved `2 questions` in [exercism](https://exercism.org/) using Golang.
