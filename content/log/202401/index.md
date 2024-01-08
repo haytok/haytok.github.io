@@ -7,6 +7,18 @@ pinned: false
 ogimage: "img/images/202401.png"
 ---
 
+## Goals for this month (January)
+
+- ...
+
+## 2024/01/08 (Mon)
+
+- Solved `4 questions` in [exercism](https://exercism.org/) using Golang.
+
+## 2024/01/07 (Sun)
+
+- Nooooooting ... :(
+
 ## 2024/01/06 (Sat)
 
 - Solved `1 questions` in [exercism](https://exercism.org/) using Golang.
