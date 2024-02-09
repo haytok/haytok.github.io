@@ -3,7 +3,7 @@ draft: false
 title: "How to develop Finch"
 date: 2024-02-09T22:33:20+09:00
 tags: ["Finch"]
-pinned: false
+pinned: true
 ogimage: "img/images/20240209.png"
 ---
 
