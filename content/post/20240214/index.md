@@ -375,6 +375,292 @@ struct socket {
 -> type には SOCK_STREAM が入ってそう。
 -> あ、`struct socket` のメンバに `struct sock` がおった ... 
 
+`struct sock` のメンバには `struct socket` がおる。なんやろなこれ ...
+
+- [ ] `struct socket` のメンバの `const struct proto_ops *ops` には何が入るかが気になるので確認する。
+- [ ] `struct socket` の変数が `socket(AF_INET, SOCK_STREAM, 0)` からどのようにして作成されるかを調査する。
+
+先に、`const struct proto_ops *ops` について調べようと思ったけど、`__sys_socket_create()` の実装を確認した方が大枠を確認できるとおもたので、一旦そっちを確認する。
+
+```bash
+ ~/kernel/linux
+> grep -rn "__sys_socket_create(" .
+./net/socket.c:1644:static struct socket *__sys_socket_create(int family, int type, int protocol)
+./net/socket.c:1671:	sock = __sys_socket_create(family, type, protocol);
+./net/socket.c:1706:	sock = __sys_socket_create(family, type,
+```
+
+socket() の定義
+
+> SYNOPSIS
+>        #include <sys/types.h>          /* See NOTES */
+>        #include <sys/socket.h>
+> 
+>        int socket(int domain, int type, int protocol);
+
+`__sys_socket_create()` の定義
+
+```c
+static struct socket *__sys_socket_create(int family, int type, int protocol)
+{
+	struct socket *sock;
+	int retval;
+
+	/* Check the SOCK_* constants for consistency.  */
+	BUILD_BUG_ON(SOCK_CLOEXEC != O_CLOEXEC);
+	BUILD_BUG_ON((SOCK_MAX | SOCK_TYPE_MASK) != SOCK_TYPE_MASK);
+	BUILD_BUG_ON(SOCK_CLOEXEC & SOCK_TYPE_MASK);
+	BUILD_BUG_ON(SOCK_NONBLOCK & SOCK_TYPE_MASK);
+
+	if ((type & ~SOCK_TYPE_MASK) & ~(SOCK_CLOEXEC | SOCK_NONBLOCK))
+		return ERR_PTR(-EINVAL);
+	type &= SOCK_TYPE_MASK;
+
+    // この実装を追っていく。
+	retval = sock_create(family, type, protocol, &sock);
+	if (retval < 0)
+		return ERR_PTR(retval);
+
+	return sock;
+}
+```
+
+`sock_create()` の定義の場所を確認する。
+
+```bash
+ ~/kernel/linux
+> grep -rn "int\ssock_create(" .
+./include/linux/net.h:254:int sock_create(int family, int type, int proto, struct socket **res);
+./net/socket.c:1620:int sock_create(int family, int type, int protocol, struct socket **res)
+```
+
+`sock_create()` の定義
+
+```c
+/**
+ *	sock_create - creates a socket
+ *	@family: protocol family (AF_INET, ...)
+ *	@type: communication type (SOCK_STREAM, ...)
+ *	@protocol: protocol (0, ...)
+ *	@res: new socket
+ *
+ *	A wrapper around __sock_create().
+ *	Returns 0 or an error. This function internally uses GFP_KERNEL.
+ */
+
+int sock_create(int family, int type, int protocol, struct socket **res)
+{
+	return __sock_create(current->nsproxy->net_ns, family, type, protocol, res, 0);
+}
+```
+
+-> あぁ、`socket()` の引数とおんなじ感じの引数になっている。`current` は CPU で実行中のプロセスを格納するためのグローバル変数やった認識で、`nsproxy` は名前空間を紐づけるメンバやった認識。KubeArmor の開発をしている際に、q2ven に教えてもらった気がする。なので、`current->nsproxy->net_ns` には CPU 上で実行されているプロセスが属している network namespace を指している。
+
+- [The Linux Kernel Data Structure Journey — “struct nsproxy” | by Shlomi Boutnaru, Ph.D. | Medium](https://medium.com/@boutnaru/the-linux-kernel-data-structure-journey-struct-nsproxy-b032c71715c5)
+
+`current` は `struct task_struct` 型であるので、定義箇所を確認する。
+
+```bash
+ ~/kernel/linux
+> grep -rn "struct\stask_struct\s{" .
+...
+./include/linux/sched.h:748:struct task_struct {
+...
+```
+
+定義
+
+```c
+struct task_struct {
+...
+	/* Namespaces: */
+	struct nsproxy			*nsproxy;
+...
+```
+
+```bash
+ ~/kernel/linux
+> grep -rn "struct\snsproxy\s{" .
+./include/linux/nsproxy.h:32:struct nsproxy {
+```
+
+```c
+/*
+ * A structure to contain pointers to all per-process
+ * namespaces - fs (mount), uts, network, sysvipc, etc.
+ *
+ * The pid namespace is an exception -- it's accessed using
+ * task_active_pid_ns.  The pid namespace here is the
+ * namespace that children will use.
+ *
+ * 'count' is the number of tasks holding a reference.
+ * The count for each namespace, then, will be the number
+ * of nsproxies pointing to it, not the number of tasks.
+ *
+ * The nsproxy is shared by tasks which share all namespaces.
+ * As soon as a single namespace is cloned or unshared, the
+ * nsproxy is copied.
+ */
+struct nsproxy {
+	refcount_t count;
+	struct uts_namespace *uts_ns;
+	struct ipc_namespace *ipc_ns;
+	struct mnt_namespace *mnt_ns;
+	struct pid_namespace *pid_ns_for_children;
+	struct net 	     *net_ns;
+	struct time_namespace *time_ns;
+	struct time_namespace *time_ns_for_children;
+	struct cgroup_namespace *cgroup_ns;
+};
+```
+
+-> `struct nsproxy` には各 namespace が定義されている。
+
+次は、`__sock_create()` の定義が記述されている箇所について調べる。
+
+```bash
+ ~/kernel/linux
+> grep -rn "int\s__sock_create(" .
+./include/linux/net.h:252:int __sock_create(struct net *net, int family, int type, int proto,
+./net/socket.c:1500:int __sock_create(struct net *net, int family, int type, int protocol,
+```
+
+長いけど、`__socket_create()` の定義はこれ
+
+```c
+/**
+ *	__sock_create - creates a socket
+ *	@net: net namespace
+ *	@family: protocol family (AF_INET, ...)
+ *	@type: communication type (SOCK_STREAM, ...)
+ *	@protocol: protocol (0, ...)
+ *	@res: new socket
+ *	@kern: boolean for kernel space sockets
+ *
+ *	Creates a new socket and assigns it to @res, passing through LSM.
+ *	Returns 0 or an error. On failure @res is set to %NULL. @kern must
+ *	be set to true if the socket resides in kernel space.
+ *	This function internally uses GFP_KERNEL.
+ */
+
+int __sock_create(struct net *net, int family, int type, int protocol,
+			 struct socket **res, int kern)
+{
+	int err;
+	struct socket *sock;
+	const struct net_proto_family *pf;
+
+	/*
+	 *      Check protocol is in range
+	 */
+	if (family < 0 || family >= NPROTO)
+		return -EAFNOSUPPORT;
+	if (type < 0 || type >= SOCK_MAX)
+		return -EINVAL;
+
+	/* Compatibility.
+
+	   This uglymoron is moved from INET layer to here to avoid
+	   deadlock in module load.
+	 */
+	if (family == PF_INET && type == SOCK_PACKET) {
+		pr_info_once("%s uses obsolete (PF_INET,SOCK_PACKET)\n",
+			     current->comm);
+		family = PF_PACKET;
+	}
+
+	err = security_socket_create(family, type, protocol, kern);
+	if (err)
+		return err;
+
+	/*
+	 *	Allocate the socket and allow the family to set things up. if
+	 *	the protocol is 0, the family is instructed to select an appropriate
+	 *	default.
+	 */
+	sock = sock_alloc();
+	if (!sock) {
+		net_warn_ratelimited("socket: no more sockets\n");
+		return -ENFILE;	/* Not exactly a match, but its the
+				   closest posix thing */
+	}
+
+	sock->type = type;
+
+#ifdef CONFIG_MODULES
+	/* Attempt to load a protocol module if the find failed.
+	 *
+	 * 12/09/1996 Marcin: But! this makes REALLY only sense, if the user
+	 * requested real, full-featured networking support upon configuration.
+	 * Otherwise module support will break!
+	 */
+	if (rcu_access_pointer(net_families[family]) == NULL)
+		request_module("net-pf-%d", family);
+#endif
+
+	rcu_read_lock();
+	pf = rcu_dereference(net_families[family]);
+	err = -EAFNOSUPPORT;
+	if (!pf)
+		goto out_release;
+
+	/*
+	 * We will call the ->create function, that possibly is in a loadable
+	 * module, so we have to bump that loadable module refcnt first.
+	 */
+	if (!try_module_get(pf->owner))
+		goto out_release;
+
+	/* Now protected by module ref count */
+	rcu_read_unlock();
+
+	err = pf->create(net, sock, protocol, kern);
+	if (err < 0)
+		goto out_module_put;
+
+	/*
+	 * Now to bump the refcnt of the [loadable] module that owns this
+	 * socket at sock_release time we decrement its refcnt.
+	 */
+	if (!try_module_get(sock->ops->owner))
+		goto out_module_busy;
+
+	/*
+	 * Now that we're done with the ->create function, the [loadable]
+	 * module can have its refcnt decremented
+	 */
+	module_put(pf->owner);
+	err = security_socket_post_create(sock, family, type, protocol, kern);
+	if (err)
+		goto out_sock_release;
+	*res = sock;
+
+	return 0;
+
+out_module_busy:
+	err = -EAFNOSUPPORT;
+out_module_put:
+	sock->ops = NULL;
+	module_put(pf->owner);
+out_sock_release:
+	sock_release(sock);
+	return err;
+
+out_release:
+	rcu_read_unlock();
+	goto out_sock_release;
+}
+```
+
+ *	Creates a new socket and assigns it to @res, passing through LSM.
+ *	Returns 0 or an error. On failure @res is set to %NULL. @kern must
+ *	be set to true if the socket resides in kernel space.
+ *	This function internally uses GFP_KERNEL.
+
+-> 新たにソケットを作成して `__sys_socket_create()` に定義されている res オブジェクト (`struct socket *sock`) に紐づける。
+
+
+
 ## 結論
 
 ...
