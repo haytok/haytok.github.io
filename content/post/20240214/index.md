@@ -569,6 +569,7 @@ int __sock_create(struct net *net, int family, int type, int protocol,
 		family = PF_PACKET;
 	}
 
+	// 後述の security_socket_post_create() との違いがよくわからん。
 	err = security_socket_create(family, type, protocol, kern);
 	if (err)
 		return err;
@@ -599,6 +600,7 @@ int __sock_create(struct net *net, int family, int type, int protocol,
 #endif
 
 	rcu_read_lock();
+	// pf には何が入っているかを調査すると、ソケット作成時処理を終えるようになるはず。
 	pf = rcu_dereference(net_families[family]);
 	err = -EAFNOSUPPORT;
 	if (!pf)
@@ -614,6 +616,7 @@ int __sock_create(struct net *net, int family, int type, int protocol,
 	/* Now protected by module ref count */
 	rcu_read_unlock();
 
+	// 重要そう
 	err = pf->create(net, sock, protocol, kern);
 	if (err < 0)
 		goto out_module_put;
@@ -630,6 +633,7 @@ int __sock_create(struct net *net, int family, int type, int protocol,
 	 * module can have its refcnt decremented
 	 */
 	module_put(pf->owner);
+	// 重要そう
 	err = security_socket_post_create(sock, family, type, protocol, kern);
 	if (err)
 		goto out_sock_release;
@@ -652,14 +656,424 @@ out_release:
 }
 ```
 
- *	Creates a new socket and assigns it to @res, passing through LSM.
- *	Returns 0 or an error. On failure @res is set to %NULL. @kern must
- *	be set to true if the socket resides in kernel space.
- *	This function internally uses GFP_KERNEL.
+`net_families` に対してプロトコルファミリー毎に処理を設定している箇所が見つからなかった ...
+`err = pf->create(net, sock, protocol, kern);` の処理が要な気がするねんけど ...
 
--> 新たにソケットを作成して `__sys_socket_create()` に定義されている res オブジェクト (`struct socket *sock`) に紐づける。
+適当にググると、`net/ipv4/af_inet.c` にプロトコルファミリーに依存したソケットの create 処理の実装があるとの情報を確認したので、確認してみる。
 
+- [linux: socketとNet名前空間 - φ(・・*)ゞ ｳｰﾝ　カーネルとか弄ったりのメモ](https://kernhack.hatenablog.com/entry/2015/09/07/234028)
 
+```bash
+ ~/kernel/linux
+> grep -rn "\s.create" net/ipv4/af_inet.c
+1144:	.create = inet_create,
+```
+
+`pf->create()` を呼び出すと、実行される本体はこれ
+
+```c
+static const struct net_proto_family inet_family_ops = {
+	.family = PF_INET,
+	.create = inet_create,
+	.owner	= THIS_MODULE,
+};
+```
+
+-> これが、関数ポインタになってるっぽい。
+
+この構造体は、`inet_init()` の `sock_register()` によって登録されている。
+`sock_register()` の実装を追うのは一旦置いておく。
+
+定義の箇所を確認
+
+```bash
+ ~/kernel/linux
+> grep -rn "\sinet_init(" .
+./net/ipv4/af_inet.c:1951:static int __init inet_init(void)
+```
+
+定義はこれ
+
+```c
+static int __init inet_init(void)
+{
+...
+	/*
+	 *	Tell SOCKET that we are alive...
+	 */
+
+	(void)sock_register(&inet_family_ops);
+...
+	/* Register the socket-side information for inet_create. */
+	for (r = &inetsw[0]; r < &inetsw[SOCK_MAX]; ++r)
+		INIT_LIST_HEAD(r);
+
+	for (q = inetsw_array; q < &inetsw_array[INETSW_ARRAY_LEN]; ++q)
+		inet_register_protosw(q);
+...
+fs_initcall(inet_init);
+```
+
+-> カーネルの初期化時に `inet_init()` が呼び出される。そのため、初期化時に `inet_family_ops` のメンバーである `inet_create()` が呼び出されて、socket() を呼び出すための下準備が完了する流れなんかな ...
+
+inet_register_protosw() で登録しているハンドラは下記で定義されている。
+
+```c
+/* Upon startup we insert all the elements in inetsw_array[] into
+ * the linked list inetsw.
+ */
+static struct inet_protosw inetsw_array[] =
+{
+	{
+		.type =       SOCK_STREAM,
+		.protocol =   IPPROTO_TCP,
+		.prot =       &tcp_prot,
+		.ops =        &inet_stream_ops,
+		.flags =      INET_PROTOSW_PERMANENT |
+			      INET_PROTOSW_ICSK,
+	},
+
+	{
+		.type =       SOCK_DGRAM,
+		.protocol =   IPPROTO_UDP,
+		.prot =       &udp_prot,
+		.ops =        &inet_dgram_ops,
+		.flags =      INET_PROTOSW_PERMANENT,
+       },
+
+       {
+		.type =       SOCK_DGRAM,
+		.protocol =   IPPROTO_ICMP,
+		.prot =       &ping_prot,
+		.ops =        &inet_sockraw_ops,
+		.flags =      INET_PROTOSW_REUSE,
+       },
+
+       {
+	       .type =       SOCK_RAW,
+	       .protocol =   IPPROTO_IP,	/* wild card */
+	       .prot =       &raw_prot,
+	       .ops =        &inet_sockraw_ops,
+	       .flags =      INET_PROTOSW_REUSE,
+       }
+};
+
+#define INETSW_ARRAY_LEN ARRAY_SIZE(inetsw_array)
+```
+
+-> `SOCK_STREAM` といった、socket() の第二引数で渡される値に関するハンドラが登録されている。
+
+`inet_register_protosw()` の定義箇所を確認する。
+
+```bash
+ ~/kernel/linux
+> grep -rn "void\sinet_register_protosw(" .
+./include/net/protocol.h:104:void inet_register_protosw(struct inet_protosw *p);
+./net/ipv4/af_inet.c:1189:void inet_register_protosw(struct inet_protosw *p)
+```
+
+定義はこれ
+
+```c
+void inet_register_protosw(struct inet_protosw *p)
+{
+	struct list_head *lh;
+	struct inet_protosw *answer;
+	int protocol = p->protocol;
+	struct list_head *last_perm;
+
+	spin_lock_bh(&inetsw_lock);
+
+	if (p->type >= SOCK_MAX)
+		goto out_illegal;
+
+	/* If we are trying to override a permanent protocol, bail. */
+	last_perm = &inetsw[p->type];
+	list_for_each(lh, &inetsw[p->type]) {
+		answer = list_entry(lh, struct inet_protosw, list);
+		/* Check only the non-wild match. */
+		if ((INET_PROTOSW_PERMANENT & answer->flags) == 0)
+			break;
+		if (protocol == answer->protocol)
+			goto out_permanent;
+		last_perm = lh;
+	}
+
+	/* Add the new entry after the last permanent entry if any, so that
+	 * the new entry does not override a permanent entry when matched with
+	 * a wild-card protocol. But it is allowed to override any existing
+	 * non-permanent entry.  This means that when we remove this entry, the
+	 * system automatically returns to the old behavior.
+	 */
+	list_add_rcu(&p->list, last_perm);
+out:
+	spin_unlock_bh(&inetsw_lock);
+
+	return;
+
+out_permanent:
+	pr_err("Attempt to override permanent protocol %d\n", protocol);
+	goto out;
+
+out_illegal:
+	pr_err("Ignoring attempt to register invalid socket type %d\n",
+	       p->type);
+	goto out;
+}
+EXPORT_SYMBOL(inet_register_protosw);
+```
+
+-> `inet_init()` 内の `inet_register_protosw()` で `inetsw` に `inetsw_array` の要素を登録して行っている。
+
+これまでは、`inet_create()` の登録処理を追ってみたが、次は、`pf->create()` で呼び出される実体である `inet_create()` の処理を追っていく。
+
+定義の箇所はこれ
+
+```bash
+ ~/kernel/linux
+> grep -rn "int\sinet_create(" .
+./net/ipv4/af_inet.c:251:static int inet_create(struct net *net, struct socket *sock, int protocol,
+```
+
+定義はこれ
+
+```c
+/*
+ *	Create an inet socket.
+ */
+
+static int inet_create(struct net *net, struct socket *sock, int protocol,
+		       int kern)
+...
+	list_for_each_entry_rcu(answer, &inetsw[sock->type], list) {
+
+		err = 0;
+		/* Check the non-wild match. */
+		if (protocol == answer->protocol) {
+			if (protocol != IPPROTO_IP)
+				break;
+		} else {
+			/* Check for the two wild cases. */
+			if (IPPROTO_IP == protocol) {
+				protocol = answer->protocol;
+				break;
+			}
+			if (IPPROTO_IP == answer->protocol)
+				break;
+		}
+		err = -EPROTONOSUPPORT;
+	}
+...
+```
+
+-> 内部では sock->state に SS_UNCONNECTED を代入したりしているが、struct socket *sock のセットアップをしていっている。また、`init_inet()` で初期化されたオブジェクトから socket() の引数に応じて `sock->ops` に ops の関数ポインタを設定している。
+
+```c
+static struct inet_protosw inetsw_array[] =
+{
+	{
+		.type =       SOCK_STREAM,
+		.protocol =   IPPROTO_TCP,
+		.prot =       &tcp_prot,
+		.ops =        &inet_stream_ops,
+		.flags =      INET_PROTOSW_PERMANENT |
+			      INET_PROTOSW_ICSK,
+	},
+```
+
+今回は `SOCK_STREAM` を socket() に引き渡した時の処理を追っていきたいので、`inet_stream_ops()` の実装を追う。
+
+```bash
+> grep -rn "inet_stream_ops" .
+grep: ./arch/x86/boot/compressed/vmlinux.bin: binary file matches
+./include/net/inet_common.h:11:extern const struct proto_ops inet_stream_ops;
+./net/ipv4/af_inet.c:1051:const struct proto_ops inet_stream_ops = {
+./net/ipv4/af_inet.c:1083:EXPORT_SYMBOL(inet_stream_ops);
+./net/ipv4/af_inet.c:1157:		.ops =        &inet_stream_ops,
+grep: ./net/ipv4/af_inet.o: binary file matches
+./net/ipv6/ipv6_sockglue.c:625:				WRITE_ONCE(sk->sk_socket->ops, &inet_stream_ops);
+grep: ./net/ipv6/ipv6_sockglue.o: binary file matches
+./net/mptcp/protocol.c:65:	return &inet_stream_ops;
+./net/xfrm/espintcp.c:586:	build_protos(&espintcp_prot, &espintcp_ops, &tcp_prot, &inet_stream_ops);
+...
+```
+
+-> あぁ、ops って構造体なんね ... ってことは、sock->ops->accept(...) みたいな感じで登録されたシステムコールが内部で呼び出される感じなんや。
+
+ちなみに、accept() の呼び出しは下の感じやった。
+
+```bash
+ ~/kernel/linux
+> grep -rn "sock->ops->accept" .
+./fs/ocfs2/cluster/tcp.c:1805:	ret = sock->ops->accept(sock, new_sock, O_NONBLOCK, false);
+./net/rds/tcp_listen.c:122:	ret = sock->ops->accept(sock, new_sock, O_NONBLOCK, true);
+```
+
+一応、`struct inet_protosw` の型を調べて `ops` の型を調べる。
+
+```bash
+ ~/kernel/linux
+> grep -rn "struct\sinet_protosw\s{" .
+./include/net/protocol.h:76:struct inet_protosw {
+```
+
+```c
+/* This is used to register socket interfaces for IP protocols.  */
+struct inet_protosw {
+	struct list_head list;
+
+        /* These two fields form the lookup key.  */
+	unsigned short	 type;	   /* This is the 2nd argument to socket(2). */
+	unsigned short	 protocol; /* This is the L4 protocol number.  */
+
+	struct proto	 *prot;
+	const struct proto_ops *ops;
+  
+	unsigned char	 flags;      /* See INET_PROTOSW_* below.  */
+};
+```
+
+-> ops って `struct proto_ops` 型の構造体やったんか ...
+
+```bash
+ ~/kernel/linux
+> grep -rn "struct\sproto_ops\s{" .
+./include/linux/net.h:161:struct proto_ops {
+```
+
+```c
+struct proto_ops {
+	int		family;
+	struct module	*owner;
+	int		(*release)   (struct socket *sock);
+	int		(*bind)	     (struct socket *sock,
+				      struct sockaddr *myaddr,
+				      int sockaddr_len);
+	int		(*connect)   (struct socket *sock,
+				      struct sockaddr *vaddr,
+				      int sockaddr_len, int flags);
+	int		(*socketpair)(struct socket *sock1,
+				      struct socket *sock2);
+	int		(*accept)    (struct socket *sock,
+				      struct socket *newsock, int flags, bool kern);
+	int		(*getname)   (struct socket *sock,
+				      struct sockaddr *addr,
+				      int peer);
+	__poll_t	(*poll)	     (struct file *file, struct socket *sock,
+				      struct poll_table_struct *wait);
+	int		(*ioctl)     (struct socket *sock, unsigned int cmd,
+				      unsigned long arg);
+#ifdef CONFIG_COMPAT
+	int	 	(*compat_ioctl) (struct socket *sock, unsigned int cmd,
+				      unsigned long arg);
+#endif
+	int		(*gettstamp) (struct socket *sock, void __user *userstamp,
+				      bool timeval, bool time32);
+	int		(*listen)    (struct socket *sock, int len);
+	int		(*shutdown)  (struct socket *sock, int flags);
+	int		(*setsockopt)(struct socket *sock, int level,
+				      int optname, sockptr_t optval,
+				      unsigned int optlen);
+	int		(*getsockopt)(struct socket *sock, int level,
+				      int optname, char __user *optval, int __user *optlen);
+	void		(*show_fdinfo)(struct seq_file *m, struct socket *sock);
+	int		(*sendmsg)   (struct socket *sock, struct msghdr *m,
+				      size_t total_len);
+	/* Notes for implementing recvmsg:
+	 * ===============================
+	 * msg->msg_namelen should get updated by the recvmsg handlers
+	 * iff msg_name != NULL. It is by default 0 to prevent
+	 * returning uninitialized memory to user space.  The recvfrom
+	 * handlers can assume that msg.msg_name is either NULL or has
+	 * a minimum size of sizeof(struct sockaddr_storage).
+	 */
+	int		(*recvmsg)   (struct socket *sock, struct msghdr *m,
+				      size_t total_len, int flags);
+	int		(*mmap)	     (struct file *file, struct socket *sock,
+				      struct vm_area_struct * vma);
+	ssize_t 	(*splice_read)(struct socket *sock,  loff_t *ppos,
+				       struct pipe_inode_info *pipe, size_t len, unsigned int flags);
+	void		(*splice_eof)(struct socket *sock);
+	int		(*set_peek_off)(struct sock *sk, int val);
+	int		(*peek_len)(struct socket *sock);
+
+	/* The following functions are called internally by kernel with
+	 * sock lock already held.
+	 */
+	int		(*read_sock)(struct sock *sk, read_descriptor_t *desc,
+				     sk_read_actor_t recv_actor);
+	/* This is different from read_sock(), it reads an entire skb at a time. */
+	int		(*read_skb)(struct sock *sk, skb_read_actor_t recv_actor);
+	int		(*sendmsg_locked)(struct sock *sk, struct msghdr *msg,
+					  size_t size);
+	int		(*set_rcvlowat)(struct sock *sk, int val);
+};
+```
+
+-> ほえー、こんな感じになってるんか、ops の配下に知ってるシステムコールとかが生えている！これで、ipv4 とか ipv6 とか気にせず呼び出せるように抽象化されてる感じなんね。
+
+話を戻して、`inet_stream_ops` の構造体に関して調査する。
+
+定義はこれ
+
+```c
+const struct proto_ops inet_stream_ops = {
+	.family		   = PF_INET,
+	.owner		   = THIS_MODULE,
+	.release	   = inet_release,
+	.bind		   = inet_bind,
+	.connect	   = inet_stream_connect,
+	.socketpair	   = sock_no_socketpair,
+	.accept		   = inet_accept,
+	.getname	   = inet_getname,
+	.poll		   = tcp_poll,
+	.ioctl		   = inet_ioctl,
+	.gettstamp	   = sock_gettstamp,
+	.listen		   = inet_listen,
+	.shutdown	   = inet_shutdown,
+	.setsockopt	   = sock_common_setsockopt,
+	.getsockopt	   = sock_common_getsockopt,
+	.sendmsg	   = inet_sendmsg,
+	.recvmsg	   = inet_recvmsg,
+#ifdef CONFIG_MMU
+	.mmap		   = tcp_mmap,
+#endif
+	.splice_eof	   = inet_splice_eof,
+	.splice_read	   = tcp_splice_read,
+	.read_sock	   = tcp_read_sock,
+	.read_skb	   = tcp_read_skb,
+	.sendmsg_locked    = tcp_sendmsg_locked,
+	.peek_len	   = tcp_peek_len,
+#ifdef CONFIG_COMPAT
+	.compat_ioctl	   = inet_compat_ioctl,
+#endif
+	.set_rcvlowat	   = tcp_set_rcvlowat,
+};
+EXPORT_SYMBOL(inet_stream_ops);
+```
+
+-> 各メンバーは別途 `inet_` の prefix がついて定義されているようです。
+
+socket() の作成のフローを追って行ったが、一旦 socket() が返す fd を使用して呼び出すことができるシステムコールの実装を確認することにする。
+
+どのシステムコールでも良かったが、`bind()` の実装を追うことにする。(難しかったら、他のシステムコールにする。)
+
+`bind()` の実体は `inet_bind()` なので、その定義を追う。
+
+---
+
+`sruct sock_common` には各プロトコルに共通する処理が魔と待ている感じはするが、後述の `#define sk_node` とかの処理の意味がイマイチわからんかった。
+
+```c
+struct sock {
+	/*
+	 * Now struct inet_timewait_sock also uses sock_common, so please just
+	 * don't add nothing before this first member (__sk_common) --acme
+	 */
+	struct sock_common	__sk_common;
+#define sk_node			__sk_common.skc_node
+...
+```
 
 ## 結論
 
