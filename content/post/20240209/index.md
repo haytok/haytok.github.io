@@ -58,6 +58,13 @@ haytok finch
 INFO[0000] Removing existing Finch virtual machine...
 INFO[0000] Finch virtual machine removed successfully
 ```
+Access VM
+
+```bash
+haytok finch [main]
+> LIMA_HOME=/Users/haytok/finch/_output/lima/data/ /Users/haytok/finch/_output/lima/bin/limactl shell finch
+[haytok@lima-finch finch]$
+```
 
 ### Configuration 1
 
