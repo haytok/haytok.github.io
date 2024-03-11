@@ -84,3 +84,11 @@ haytok finch
 #### Reference
 
 - [dial tcp: lookup proxy.golang.org i/o timeout · projectdiscovery/httpx · Discussion #658](https://github.com/projectdiscovery/httpx/discussions/658)
+
+### Configuration 2
+
+Setup for local tests using local common-tests repository.
+
+```bash
+go mod edit -replace github.com/runfinch/common-tests=../common-tests
+```
