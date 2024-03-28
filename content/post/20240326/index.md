@@ -15,6 +15,8 @@ ogimage: "img/images/20240326.png"
 
 事の発端は issue に詳しく書いてあります。
 
+## Summary
+
 ## 開発環境 (読み飛ばしても可)
 
 開発環境は基本的に自前の M3 MacBook Air を使用している。
@@ -82,10 +84,10 @@ haytok ~/workspace
 ## 調査すること
 
 1. nerdctl attach コマンドを実行した際に発生するエラーを突き止め、そのエラーが発生する条件を調査する。
-2. `sudo nerdctl run --name test -d alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"` を実行した際動作の確認と workaround の調査
-3. nerdctl 内で使用されているパッケージ fifo の動作確認
+2. `sudo nerdctl run --name test -d alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"` を実行した際動作の確認と workaround を調査する。
+3. nerdctl 内で使用されているパッケージ fifo の動作を確認する。
 
-## 調査 1
+## 調査 1 (nerdctl attach コマンドを実行した際に発生するエラーを突き止め、そのエラーが発生する条件を調査する。)
 
 実際に発生したエラーは下記になります。
 
@@ -100,6 +102,8 @@ FATA[0000] failed to attach to the container: failed to open stdout fifo: error 
 ```
 
 ここで発生したエラーメッセージ `failed to attach to the container: failed to open stdout fifo: error creating fifo binary:///usr/local/bin/nerdctl?_NERDCTL_INTERNAL_LOGGING=%2Fvar%2Flib%2Fnerdctl%2F1935db59: no such file or directory` を元に、エラーが発生する過程を追います。
+
+Check error message `failed to attach to the container`
 
 ```bash
 [haytok@lima-default nerdctl]$ grep -rn "failed to attach to the container" . -B2 -A1
@@ -119,6 +123,8 @@ grep: ./_output/nerdctl: binary file matches
 ./container.go-191-	return c.loadTask(ctx, attach)
 ./container.go-192-}
 ```
+
+Check `loadTask()`
 
 ```bash
 [haytok@lima-default containerd]$ grep -rn ") loadTask(" . -A29
@@ -166,13 +172,15 @@ Check `attachExistingIO()`
 
 `attachExistingIO()` 関数の返り値のエラーによって `failed to attach to the container: ...` のエラーが発生しているはずだが、エラーを返しうるのは `ioAttach()` しかない。
 
-`ioAttach()` は `container.Task(ctx, cio.NewAttach(opt))` を呼び出す際の第二引数が実態なので、その実装を追っていく。
+`ioAttach()` は `container.Task(ctx, cio.NewAttach(opt))` を呼び出す際の第二引数が体なので、その実装を追っていく。
 
 ```bash
 ./pkg/cmd/container/attach.go-96-	task, err = container.Task(ctx, cio.NewAttach(opt))
 ```
 
 引き続き、どの処理が error を返しうるかの観点から実装を追っていく。
+
+Check `NewAttach()`
 
 ```bash
 [haytok@lima-default containerd]$ grep -rn "func NewAttach(" . -A20
@@ -199,6 +207,8 @@ Check `attachExistingIO()`
 ./cio/io.go-180-}
 ```
 
+Check `copyIO`
+
 ```bash
 [haytok@lima-default containerd]$ grep -rn "func copyIO(" . -A6
 ./cio/io_windows.go:44:func copyIO(fifos *FIFOSet, ioset *Streams) (_ *cio, retErr error) {
@@ -219,6 +229,8 @@ Check `attachExistingIO()`
 ```
 
 windows の実装に関心はないので、unix の方の実装を追う。
+
+Check `openFifos()`
 
 ```bash
 [haytok@lima-default containerd]$ grep -rn "func openFifos(" . -A23
@@ -248,7 +260,7 @@ windows の実装に関心はないので、unix の方の実装を追う。
 ./cio/io_unix.go-136-		}
 ```
 
-Check OpenFifo in fifo repository
+Check `OpenFifo()` in fifo repository
 
 ```bash
 [haytok@lima-default fifo]$ grep -rn "func OpenFifo(" *.go -A9
@@ -264,7 +276,7 @@ fifo.go-80-	return fifo, err
 fifo.go-81-}
 ```
 
-Check fifo source code not nerdctl source code
+Check `openFifo()` in fifo source code not nerdctl source code
 
 ```bash
 [haytok@lima-default fifo]$ grep -rn "func openFifo(" *.go -A10
@@ -292,6 +304,8 @@ fifo.go-93-			return nil, err
 ```bash
 [haytok@lima-default nerdctl]$ alias | grep jake
 alias jake='make -j $(nproc)'
+[haytok@lima-default nerdctl]$ jake
+GO111MODULE=on CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w -X github.com/containerd/nerdctl/v2/pkg/version.Version=78b66fdc.m -X github.com/containerd/nerdctl/v2/pkg/version.Revision=78b66fdcde0eeafb95fdf9915dc4ccbaef51021a.m"   -o /Users/haytok/workspace/nerdctl/_output/nerdctl github.com/containerd/nerdctl/v2/cmd/nerdctl
 [haytok@lima-default nerdctl]$ sudo ./_output/nerdctl run --name test -d alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"
 3209cc5c61e2adebd56cfa3a020e312a364d4faa934daa1c69252cdaed3d2ec6
 [haytok@lima-default nerdctl]$ sudo ./_output/nerdctl attach test
@@ -307,9 +321,509 @@ In openFifos, fifos.Stderr -> binary:///Users/haytok/workspace/nerdctl/_output/n
 FATA[0000] failed to attach to the container: failed to open stdout fifo: error creating fifo binary:///Users/haytok/workspace/nerdctl/_output/nerdctl?_NERDCTL_INTERNAL_LOGGING=%2Fvar%2Flib%2Fnerdctl%2F1935db59: no such file or directory
 ```
 
-Debug メッセージ等を加味すると、fn (fifos.Stdout) に `binary:///Users/haytok/workspace/nerdctl/_output/nerdctl?_NERDCTL_INTERNAL_LOGGING=%2Fvar%2Flib%2Fnerdctl%2F1935db59` が設定されていることによって、エラーになっている。
+Debug メッセージ等を加味すると、fn (`fifos.Stdout`) に `binary:///Users/haytok/workspace/nerdctl/_output/nerdctl?_NERDCTL_INTERNAL_LOGGING=%2Fvar%2Flib%2Fnerdctl%2F1935db59` が設定されていることによって、エラーになっている。
 
-`1935db59` の値は一意に定まるハッシュ値の一部っぽい。
+なお、-d コマンドでバックグラウンドでコンテナを起動し、その際に標準出力に吐き出すように実行したコマンド `sh -c while true; do echo /'Hello, world/'; sleep 1; done` の結果は `nerdctl logs <コンテナ名>` から確認できる log ファイルには吐き出されいていることが明らかになった。
+
+エラーに関しては、`nerdctl run -d ...` でコンテナを起動しているので、`fifos.Stdout` に標準出力のファイルが指定されていないのではないかと考えられる。
+
+一旦、比較するために `nerdctl run --name hoge --rm -it alpine sh` を実行した際に、`fifo.Stdout` に設定されるファイルを確認してみる。
+
+```bash
+[haytok@lima-default nerdctl]$ sudo _output/nerdctl run --name hoge --rm -it alpine sh
+0: In OpenFifo
+0: In openFifo, fn: /run/containerd/fifo/345658729/f26c33cf34999edf45ab3306aa074b7496671cb8bfcd9a6d870623cbeec11be4-stdin
+1: In openFifo
+2: In openFifo
+0: In OpenFifo
+0: In openFifo, fn: /run/containerd/fifo/345658729/f26c33cf34999edf45ab3306aa074b7496671cb8bfcd9a6d870623cbeec11be4-stdout
+1: In openFifo
+2: In openFifo
+/ #
+```
+
+`-d` を指定せず `-it` オプションを指定してフォアグラウンドでコンテナを起動すると標準出力と標準入力にはそれ用のファイルが作成された。
+
+```bash
+[haytok@lima-default containerd]$ sudo ../nerdctl/_output/nerdctl ps
+CONTAINER ID    IMAGE                              COMMAND                   CREATED          STATUS    PORTS    NAMES
+3209cc5c61e2    docker.io/library/alpine:latest    "sh -c while true; d…"    22 hours ago     Up                 test
+f26c33cf3499    docker.io/library/alpine:latest    "sh"                      2 minutes ago    Up                 hoge
+[haytok@lima-default containerd]$ sudo ../nerdctl/_output/nerdctl ps --no-trunc
+CONTAINER ID                                                        IMAGE                              COMMAND                                                        CREATED          STATUS    PORTS    NAMES
+3209cc5c61e2adebd56cfa3a020e312a364d4faa934daa1c69252cdaed3d2ec6    docker.io/library/alpine:latest    "sh -c while true; do echo /'Hello, world/'; sleep 1; done"    22 hours ago     Up                 test
+f26c33cf34999edf45ab3306aa074b7496671cb8bfcd9a6d870623cbeec11be4    docker.io/library/alpine:latest    "sh"                                                           2 minutes ago    Up                 hoge
+```
+
+`345658729` の値は何かわからんけど、その配下にコンテナ hoge に関連するデータが配置されている。
+
+```bash
+[haytok@lima-default containerd]$ sudo ls -la  /run/containerd/fifo/345658729/
+total 0
+drwx------.  2 root root  80 Mar 27 22:03 .
+drwx------. 11 root root 220 Mar 27 22:03 ..
+prwx------.  1 root root   0 Mar 27 22:09 f26c33cf34999edf45ab3306aa074b7496671cb8bfcd9a6d870623cbeec11be4-stdin
+prwx------.  1 root root   0 Mar 27 22:09 f26c33cf34999edf45ab3306aa074b7496671cb8bfcd9a6d870623cbeec11be4-stdout
+```
+
+stdout と stdin のためのパイプが作成されている。
+
+一方、`-d` でコンテナを起動する前後での `/run/containerd/fifo` 配下のディレクトリ構成の違いを確認したところ、差はなかった。
+
+```bash
+[haytok@lima-default containerd]$ sudo ls /run/containerd/fifo
+118231144  2164213081  2376111114  2554841498  313929042  345658729  3541429126  890640757  938856586
+
+# run sudo ./_output/nerdctl run --name testtest -d alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"
+
+[haytok@lima-default containerd]$ sudo ls /run/containerd/fifo
+118231144  2164213081  2376111114  2554841498  313929042  345658729  3541429126  890640757  938856586
+```
+
+なので、`-d` の時は fifo のパイプのファイルが作成されない処理を追ってみる。
+
+つまり、`nerdctl run` の処理を追う。
+
+ディレクトリ構成的に `nerdctl/cmd/nerdctl/container_run.go` 内の処理が `nerdctl run` 時に呼び出されるはず。
+
+```bash
+haytok ~/workspace/nerdctl [main]
+> git diff cmd/nerdctl/container_run.go
+diff --git a/cmd/nerdctl/container_run.go b/cmd/nerdctl/container_run.go
+index 077332d4..a059b504 100644
+--- a/cmd/nerdctl/container_run.go
++++ b/cmd/nerdctl/container_run.go
+@@ -373,6 +373,7 @@ func runAction(cmd *cobra.Command, args []string) error {
+        }
+        logURI := lab[labels.LogURI]
+        detachC := make(chan struct{})
++       fmt.Printf("0: In runAction\n")
+        task, err := taskutil.NewTask(ctx, client, c, false, createOpt.Interactive, createOpt.TTY, createOpt.Detach,
+                con, logURI, createOpt.DetachKeys, createOpt.GOptions.Namespace, detachC)
+        if err != nil {
+```
+
+build して確認したところ、予想通りやった。
+
+```bash
+[haytok@lima-default nerdctl]$ sudo ./_output/nerdctl run --name testtest -d alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"
+04445d3aef8f12697ea975d78cc7ff831a27afa3140107a59ca5006530c23525
+[haytok@lima-default nerdctl]$ jake
+GO111MODULE=on CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w -X github.com/containerd/nerdctl/v2/pkg/version.Version=78b66fdc.m -X github.com/containerd/nerdctl/v2/pkg/version.Revision=78b66fdcde0eeafb95fdf9915dc4ccbaef51021a.m"   -o /Users/haytok/workspace/nerdctl/_output/nerdctl github.com/containerd/nerdctl/v2/cmd/nerdctl
+[haytok@lima-default nerdctl]$ sudo _output/nerdctl run --name hoge --rm -it alpine sh
+0: In runAction
+0: In OpenFifo
+0: In openFifo, fn: /run/containerd/fifo/1034591092/80976a1afcadac0ab011154709e64522ee60f068cd46ff0aa3322bc10a72e54f-stdin
+1: In openFifo
+2: In openFifo
+0: In OpenFifo
+0: In openFifo, fn: /run/containerd/fifo/1034591092/80976a1afcadac0ab011154709e64522ee60f068cd46ff0aa3322bc10a72e54f-stdout
+1: In openFifo
+2: In openFifo
+/ #
+```
+
+なので、以降は `runAction()` 内の処理を追っていく。
+
+特に、下記の処理が重要そうなので、`NewTask()` の処理を確認する。
+
+```golang
+	task, err := taskutil.NewTask(ctx, client, c, false, createOpt.Interactive, createOpt.TTY, createOpt.Detach,
+		con, logURI, createOpt.DetachKeys, createOpt.GOptions.Namespace, detachC)
+	if err != nil {
+		return err
+	}
+	if err := task.Start(ctx); err != nil {
+		return err
+	}
+```
+
+Check `NewTask()`
+
+```bash
+[haytok@lima-default nerdctl]$ grep -rn " NewTask(" -A120
+pkg/taskutil/taskutil.go:42:func NewTask(ctx context.Context, client *containerd.Client, container containerd.Container,
+pkg/taskutil/taskutil.go-43-	flagA, flagI, flagT, flagD bool, con console.Console, logURI, detachKeys, namespace string, detachC chan<- struct{}) (containerd.Task, error) {
+pkg/taskutil/taskutil.go-44-	var t containerd.Task
+pkg/taskutil/taskutil.go-45-	fmt.Printf("0: In, NewTask\n")
+pkg/taskutil/taskutil.go-46-	closer := func() {
+pkg/taskutil/taskutil.go-47-		if detachC != nil {
+pkg/taskutil/taskutil.go-48-			detachC <- struct{}{}
+pkg/taskutil/taskutil.go-49-		}
+pkg/taskutil/taskutil.go-50-		// t will be set by container.NewTask at the end of this function.
+pkg/taskutil/taskutil.go-51-		//
+pkg/taskutil/taskutil.go-52-		// We cannot use container.Task(ctx, cio.Load) to get the IO here
+pkg/taskutil/taskutil.go-53-		// because the `cancel` field of the returned `*cio` is nil. [1]
+pkg/taskutil/taskutil.go-54-		//
+pkg/taskutil/taskutil.go-55-		// [1] https://github.com/containerd/containerd/blob/8f756bc8c26465bd93e78d9cd42082b66f276e10/cio/io.go#L358-L359
+pkg/taskutil/taskutil.go-56-		io := t.IO()
+pkg/taskutil/taskutil.go-57-		if io == nil {
+pkg/taskutil/taskutil.go-58-			log.G(ctx).Errorf("got a nil io")
+pkg/taskutil/taskutil.go-59-			return
+pkg/taskutil/taskutil.go-60-		}
+pkg/taskutil/taskutil.go-61-		io.Cancel()
+pkg/taskutil/taskutil.go-62-	}
+pkg/taskutil/taskutil.go-63-	var ioCreator cio.Creator
+pkg/taskutil/taskutil.go-64-	if flagA {
+pkg/taskutil/taskutil.go-65-		fmt.Printf("1: In, NewTask\n")
+pkg/taskutil/taskutil.go-66-		log.G(ctx).Debug("attaching output instead of using the log-uri")
+pkg/taskutil/taskutil.go-67-		if flagT {
+pkg/taskutil/taskutil.go-68-			in, err := consoleutil.NewDetachableStdin(con, detachKeys, closer)
+pkg/taskutil/taskutil.go-69-			if err != nil {
+pkg/taskutil/taskutil.go-70-				return nil, err
+pkg/taskutil/taskutil.go-71-			}
+pkg/taskutil/taskutil.go-72-			ioCreator = cio.NewCreator(cio.WithStreams(in, con, nil), cio.WithTerminal)
+pkg/taskutil/taskutil.go-73-		} else {
+pkg/taskutil/taskutil.go-74-			ioCreator = cio.NewCreator(cio.WithStdio)
+pkg/taskutil/taskutil.go-75-		}
+pkg/taskutil/taskutil.go-76-
+pkg/taskutil/taskutil.go-77-	} else if flagT && flagD {
+pkg/taskutil/taskutil.go-78-		fmt.Printf("2: In, NewTask\n")
+pkg/taskutil/taskutil.go-79-		u, err := url.Parse(logURI)
+pkg/taskutil/taskutil.go-80-		if err != nil {
+pkg/taskutil/taskutil.go-81-			return nil, err
+pkg/taskutil/taskutil.go-82-		}
+pkg/taskutil/taskutil.go-83-
+pkg/taskutil/taskutil.go-84-		var args []string
+pkg/taskutil/taskutil.go-85-		for k, vs := range u.Query() {
+pkg/taskutil/taskutil.go-86-			args = append(args, k)
+pkg/taskutil/taskutil.go-87-			if len(vs) > 0 {
+pkg/taskutil/taskutil.go-88-				args = append(args, vs[0])
+pkg/taskutil/taskutil.go-89-			}
+pkg/taskutil/taskutil.go-90-		}
+pkg/taskutil/taskutil.go-91-
+pkg/taskutil/taskutil.go-92-		// args[0]: _NERDCTL_INTERNAL_LOGGING
+pkg/taskutil/taskutil.go-93-		// args[1]: /var/lib/nerdctl/1935db59
+pkg/taskutil/taskutil.go-94-		fmt.Printf("0: In NewTask, args: %#v", args)
+pkg/taskutil/taskutil.go-95-		if len(args) != 2 {
+pkg/taskutil/taskutil.go-96-			return nil, errors.New("parse logging path error")
+pkg/taskutil/taskutil.go-97-		}
+pkg/taskutil/taskutil.go-98-		ioCreator = cio.TerminalBinaryIO(u.Path, map[string]string{
+pkg/taskutil/taskutil.go-99-			args[0]: args[1],
+pkg/taskutil/taskutil.go-100-		})
+pkg/taskutil/taskutil.go-101-	} else if flagT && !flagD {
+pkg/taskutil/taskutil.go-102-		fmt.Printf("3: In, NewTask\n")
+pkg/taskutil/taskutil.go-103-
+pkg/taskutil/taskutil.go-104-		if con == nil {
+pkg/taskutil/taskutil.go-105-			return nil, errors.New("got nil con with flagT=true")
+pkg/taskutil/taskutil.go-106-		}
+pkg/taskutil/taskutil.go-107-		var in io.Reader
+pkg/taskutil/taskutil.go-108-		if flagI {
+pkg/taskutil/taskutil.go-109-			// FIXME: check IsTerminal on Windows too
+pkg/taskutil/taskutil.go-110-			if runtime.GOOS != "windows" && !term.IsTerminal(0) {
+pkg/taskutil/taskutil.go-111-				return nil, errors.New("the input device is not a TTY")
+pkg/taskutil/taskutil.go-112-			}
+pkg/taskutil/taskutil.go-113-			var err error
+pkg/taskutil/taskutil.go-114-			in, err = consoleutil.NewDetachableStdin(con, detachKeys, closer)
+pkg/taskutil/taskutil.go-115-			if err != nil {
+pkg/taskutil/taskutil.go-116-				return nil, err
+pkg/taskutil/taskutil.go-117-			}
+pkg/taskutil/taskutil.go-118-		}
+pkg/taskutil/taskutil.go-119-		ioCreator = cioutil.NewContainerIO(namespace, logURI, true, in, os.Stdout, os.Stderr)
+pkg/taskutil/taskutil.go-120-	} else if flagD {
+pkg/taskutil/taskutil.go-121-		fmt.Printf("4: In, NewTask\n")
+pkg/taskutil/taskutil.go-122-		ioCreator = cio.NewCreator(cio.WithStdio)
+pkg/taskutil/taskutil.go-123-	} else if flagD && logURI != "" {
+pkg/taskutil/taskutil.go-124-		fmt.Printf("44: In, NewTask, logURI: %s, flagD: %b\n", logURI, flagD)
+pkg/taskutil/taskutil.go-125-		// sudo ./_output/nerdctl run --name test2 -d alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"
+pkg/taskutil/taskutil.go-126-		// を実行した時は。この if 文に処理が実施される。
+pkg/taskutil/taskutil.go-127-
+pkg/taskutil/taskutil.go-128-		u, err := url.Parse(logURI)
+pkg/taskutil/taskutil.go-129-		if err != nil {
+pkg/taskutil/taskutil.go-130-			return nil, err
+pkg/taskutil/taskutil.go-131-		}
+pkg/taskutil/taskutil.go-132-		fmt.Printf("444: In, NewTask, u: %#v\n", u)
+pkg/taskutil/taskutil.go-133-		ioCreator = cio.LogURI(u)
+pkg/taskutil/taskutil.go-134-	} else {
+pkg/taskutil/taskutil.go-135-		fmt.Printf("5: In, NewTask, flagT && !flagD\n")
+pkg/taskutil/taskutil.go-136-		var in io.Reader
+pkg/taskutil/taskutil.go-137-		if flagI {
+pkg/taskutil/taskutil.go-138-			if sv, err := infoutil.ServerSemVer(ctx, client); err != nil {
+pkg/taskutil/taskutil.go-139-				log.G(ctx).Warn(err)
+pkg/taskutil/taskutil.go-140-			} else if sv.LessThan(semver.MustParse("1.6.0-0")) {
+pkg/taskutil/taskutil.go-141-				log.G(ctx).Warnf("`nerdctl (run|exec) -i` without `-t` expects containerd 1.6 or later, got containerd %v", sv)
+pkg/taskutil/taskutil.go-142-			}
+pkg/taskutil/taskutil.go-143-			var stdinC io.ReadCloser = &StdinCloser{
+pkg/taskutil/taskutil.go-144-				Stdin: os.Stdin,
+pkg/taskutil/taskutil.go-145-				Closer: func() {
+pkg/taskutil/taskutil.go-146-					if t, err := container.Task(ctx, nil); err != nil {
+pkg/taskutil/taskutil.go-147-						log.G(ctx).WithError(err).Debugf("failed to get task for StdinCloser")
+pkg/taskutil/taskutil.go-148-					} else {
+pkg/taskutil/taskutil.go-149-						t.CloseIO(ctx, containerd.WithStdinCloser)
+pkg/taskutil/taskutil.go-150-					}
+pkg/taskutil/taskutil.go-151-				},
+pkg/taskutil/taskutil.go-152-			}
+pkg/taskutil/taskutil.go-153-			in = stdinC
+pkg/taskutil/taskutil.go-154-		}
+pkg/taskutil/taskutil.go-155-		ioCreator = cioutil.NewContainerIO(namespace, logURI, false, in, os.Stdout, os.Stderr)
+pkg/taskutil/taskutil.go-156-	}
+pkg/taskutil/taskutil.go-157-	t, err := container.NewTask(ctx, ioCreator)
+pkg/taskutil/taskutil.go-158-	if err != nil {
+pkg/taskutil/taskutil.go-159-		return nil, err
+pkg/taskutil/taskutil.go-160-	}
+pkg/taskutil/taskutil.go-161-	return t, nil
+pkg/taskutil/taskutil.go-162-}
+```
+
+ここでやっと [Shubhranshu153 ]() が言及していた処理が出てきた！！！
+
+[Shubhranshu153]() の指摘にあるように、下記のコードを足して動作確認してみる。
+
+確認する際は nerdctl を rebuild して、再度コンテナを起動させる。
+
+```bash
+haytok ~/workspace/nerdctl [main]
+> git diff pkg/
+diff --git a/pkg/taskutil/taskutil.go b/pkg/taskutil/taskutil.go
+index 101452f8..3ca063d1 100644
+--- a/pkg/taskutil/taskutil.go
++++ b/pkg/taskutil/taskutil.go
+...
+@@ -111,13 +117,22 @@ func NewTask(ctx context.Context, client *containerd.Client, container container
+                        }
+                }
+                ioCreator = cioutil.NewContainerIO(namespace, logURI, true, in, os.Stdout, os.Stderr)
++       } else if flagD {
++               fmt.Printf("4: In, NewTask\n")
++               ioCreator = cio.NewCreator(cio.WithStdio)
+        } else if flagD && logURI != "" {
+...
+```
+
+そうすると、確かに -d で起動したコンテナに `nerdctl attach` することができた。
+
+```bash
+[haytok@lima-default nerdctl]$ sudo ./_output/nerdctl run --name test -d alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"
+0: In runAction
+0: In, NewTask
+4: In, NewTask
+0: In OpenFifo
+0: In openFifo, fn: /run/containerd/fifo/3201500946/40589e0394da21a578fc5767b92b3aac8333dea55fdcd0b531e5d772c7f8793b-stdin
+1: In openFifo
+2: In openFifo
+0: In OpenFifo
+0: In openFifo, fn: /run/containerd/fifo/3201500946/40589e0394da21a578fc5767b92b3aac8333dea55fdcd0b531e5d772c7f8793b-stdout
+1: In openFifo
+2: In openFifo
+0: In OpenFifo
+0: In openFifo, fn: /run/containerd/fifo/3201500946/40589e0394da21a578fc5767b92b3aac8333dea55fdcd0b531e5d772c7f8793b-stderr
+1: In openFifo
+2: In openFifo
+/Hello, world/
+40589e0394da21a578fc5767b92b3aac8333dea55fdcd0b531e5d772c7f8793b
+[haytok@lima-default nerdctl]$ sudo ./_output/nerdctl attach test
+0: In loadTask
+0: In OpenFifo
+0: In openFifo, fn: /run/containerd/fifo/3201500946/40589e0394da21a578fc5767b92b3aac8333dea55fdcd0b531e5d772c7f8793b-stdin
+0: In OpenFifo
+0: In openFifo, fn: /run/containerd/fifo/3201500946/40589e0394da21a578fc5767b92b3aac8333dea55fdcd0b531e5d772c7f8793b-stdout
+0: In OpenFifo
+0: In openFifo, fn: /run/containerd/fifo/3201500946/40589e0394da21a578fc5767b92b3aac8333dea55fdcd0b531e5d772c7f8793b-stderr
+/Hello, world/
+/Hello, world/
+/Hello, world/
+```
+
+```bash
+[haytok@lima-default nerdctl]$ sudo ./_output/nerdctl ps --no-trunc
+0: In loadTask
+0: In loadTask
+0: In loadTask
+0: In loadTask
+CONTAINER ID                                                        IMAGE                              COMMAND                                                        CREATED               STATUS    PORTS    NAMES
+04445d3aef8f12697ea975d78cc7ff831a27afa3140107a59ca5006530c23525    docker.io/library/alpine:latest    "sh -c while true; do echo /'Hello, world/'; sleep 1; done"    20 minutes ago        Up                 testtest
+a074368ed3103fa9ce8e1b4b2e366bfc85b90a200b8d33b5db9bb8befaebfa0f    docker.io/library/alpine:latest    "sh -c while true; do echo /'Hello, world/'; sleep 1; done"    About a minute ago    Up                 test
+[haytok@lima-default containerd]$ sudo tree -L 2  /run/containerd/fifo
+/run/containerd/fifo
+├── 1034591092
+│   ├── 80976a1afcadac0ab011154709e64522ee60f068cd46ff0aa3322bc10a72e54f-stdin
+│   └── 80976a1afcadac0ab011154709e64522ee60f068cd46ff0aa3322bc10a72e54f-stdout
+├── 118231144
+│   ├── 1ae9c69f9ee18e2263455c41cb9162c4608934cb76b3eb65f26ea7cb0a5064ea-stdin
+│   └── 1ae9c69f9ee18e2263455c41cb9162c4608934cb76b3eb65f26ea7cb0a5064ea-stdout
+├── 2164213081
+├── 2376111114
+│   ├── 95e8262aedb39d0900968195ec65db649c917f369fcbb68475b163fbf820515d-stdin
+│   └── 95e8262aedb39d0900968195ec65db649c917f369fcbb68475b163fbf820515d-stdout
+├── 2439977144
+│   ├── a074368ed3103fa9ce8e1b4b2e366bfc85b90a200b8d33b5db9bb8befaebfa0f-stderr
+│   ├── a074368ed3103fa9ce8e1b4b2e366bfc85b90a200b8d33b5db9bb8befaebfa0f-stdin
+│   └── a074368ed3103fa9ce8e1b4b2e366bfc85b90a200b8d33b5db9bb8befaebfa0f-stdout
+├── 2554841498
+│   ├── b5a6199c3cc4f2409e09e2410d8038d3108ca234f64090108c788f35c9b1f0b5-stdin
+│   └── b5a6199c3cc4f2409e09e2410d8038d3108ca234f64090108c788f35c9b1f0b5-stdout
+├── 313929042
+├── 345658729
+│   ├── f26c33cf34999edf45ab3306aa074b7496671cb8bfcd9a6d870623cbeec11be4-stdin
+│   └── f26c33cf34999edf45ab3306aa074b7496671cb8bfcd9a6d870623cbeec11be4-stdout
+├── 3541429126
+│   ├── 838f295c4635acb3a06e4d5a81ed49d84f1dfb0fa532666089477eb6e70ad3d0-stdin
+│   └── 838f295c4635acb3a06e4d5a81ed49d84f1dfb0fa532666089477eb6e70ad3d0-stdout
+├── 890640757
+└── 938856586
+    ├── affc6c7417229c0d15f43eb2d8f0322cdd7737c5953fe5d079b08cd0f1862593-stdin
+    └── affc6c7417229c0d15f43eb2d8f0322cdd7737c5953fe5d079b08cd0f1862593-stdout
+
+12 directories, 17 files
+[haytok@lima-default containerd]$ sudo cat /run/containerd/fifo/2439977144/a074368ed3103fa9ce8e1b4b2e366bfc85b90a200b8d33b5db9bb8befaebfa0f-stdout
+/Hello, world/
+/Hello, world/
+/Hello, world/
+...
+```
+
+以上から、`nerdctl run` を実行し、`-d` オプションのみを指定した時でも stdin / stdout / stderr 用の fifo を作成するようにロジックを変更すると、とりあえず `-d` で起動したコンテナに `nerdctl attach` を実行することはできる。
+
+## 調査 2 (`sudo nerdctl run --name test -d alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"` を実行した際動作の確認と workaround を調査する。)
+
+コンテナを起動する際のオプションの組み合わせの動作を確認してみる。
+
+- https://github.com/containerd/nerdctl/blob/main/pkg/taskutil/taskutil.go#L41-L147
+
+logURI に文字列が挿入される状況が不明
+
+```golang
+// NewTask is from https://github.com/containerd/containerd/blob/v1.4.3/cmd/ctr/commands/tasks/tasks_unix.go#L70-L108
+func NewTask(ctx context.Context, client *containerd.Client, container containerd.Container,
+	flagA, flagI, flagT, flagD bool, con console.Console, logURI, detachKeys, namespace string, detachC chan<- struct{}) (containerd.Task, error) {
+	var t containerd.Task
+	fmt.Printf("0: In, NewTask\n")
+	closer := func() {
+		if detachC != nil {
+			detachC <- struct{}{}
+		}
+		// t will be set by container.NewTask at the end of this function.
+		//
+		// We cannot use container.Task(ctx, cio.Load) to get the IO here
+		// because the `cancel` field of the returned `*cio` is nil. [1]
+		//
+		// [1] https://github.com/containerd/containerd/blob/8f756bc8c26465bd93e78d9cd42082b66f276e10/cio/io.go#L358-L359
+		io := t.IO()
+		if io == nil {
+			log.G(ctx).Errorf("got a nil io")
+			return
+		}
+		io.Cancel()
+	}
+	var ioCreator cio.Creator
+	if flagA {
+		fmt.Printf("1: In, NewTask\n")
+		log.G(ctx).Debug("attaching output instead of using the log-uri")
+		if flagT {
+			in, err := consoleutil.NewDetachableStdin(con, detachKeys, closer)
+			if err != nil {
+				return nil, err
+			}
+			ioCreator = cio.NewCreator(cio.WithStreams(in, con, nil), cio.WithTerminal)
+		} else {
+			ioCreator = cio.NewCreator(cio.WithStdio)
+		}
+
+	} else if flagT && flagD {
+		fmt.Printf("2: In, NewTask\n")
+		u, err := url.Parse(logURI)
+		if err != nil {
+			return nil, err
+		}
+
+		var args []string
+		for k, vs := range u.Query() {
+			args = append(args, k)
+			if len(vs) > 0 {
+				args = append(args, vs[0])
+			}
+		}
+
+		// args[0]: _NERDCTL_INTERNAL_LOGGING
+		// args[1]: /var/lib/nerdctl/1935db59
+		fmt.Printf("0: In NewTask, args: %#v\n", args)
+		if len(args) != 2 {
+			return nil, errors.New("parse logging path error")
+		}
+		ioCreator = cio.TerminalBinaryIO(u.Path, map[string]string{
+			args[0]: args[1],
+		})
+	} else if flagT && !flagD {
+		fmt.Printf("3: In, NewTask\n")
+
+		if con == nil {
+			return nil, errors.New("got nil con with flagT=true")
+		}
+		var in io.Reader
+		if flagI {
+			// FIXME: check IsTerminal on Windows too
+			if runtime.GOOS != "windows" && !term.IsTerminal(0) {
+				return nil, errors.New("the input device is not a TTY")
+			}
+			var err error
+			in, err = consoleutil.NewDetachableStdin(con, detachKeys, closer)
+			if err != nil {
+				return nil, err
+			}
+		}
+		ioCreator = cioutil.NewContainerIO(namespace, logURI, true, in, os.Stdout, os.Stderr)
+	} else if flagD {
+		fmt.Printf("4: In, NewTask\n")
+		ioCreator = cio.NewCreator(cio.WithStdio)
+	} else if flagD && logURI != "" {
+		fmt.Printf("44: In, NewTask, logURI: %s, flagD: %b\n", logURI, flagD)
+		// sudo ./_output/nerdctl run --name test2 -d alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"
+		// を実行した時は。この if 文に処理が実施される。
+
+		u, err := url.Parse(logURI)
+		if err != nil {
+			return nil, err
+		}
+		fmt.Printf("444: In, NewTask, u: %#v\n", u)
+		ioCreator = cio.LogURI(u)
+	} else {
+		fmt.Printf("5: In, NewTask, flagT && !flagD\n")
+		var in io.Reader
+		if flagI {
+			if sv, err := infoutil.ServerSemVer(ctx, client); err != nil {
+				log.G(ctx).Warn(err)
+			} else if sv.LessThan(semver.MustParse("1.6.0-0")) {
+				log.G(ctx).Warnf("`nerdctl (run|exec) -i` without `-t` expects containerd 1.6 or later, got containerd %v", sv)
+			}
+			var stdinC io.ReadCloser = &StdinCloser{
+				Stdin: os.Stdin,
+				Closer: func() {
+					if t, err := container.Task(ctx, nil); err != nil {
+						log.G(ctx).WithError(err).Debugf("failed to get task for StdinCloser")
+					} else {
+						t.CloseIO(ctx, containerd.WithStdinCloser)
+					}
+				},
+			}
+			in = stdinC
+		}
+		ioCreator = cioutil.NewContainerIO(namespace, logURI, false, in, os.Stdout, os.Stderr)
+	}
+	t, err := container.NewTask(ctx, ioCreator)
+	if err != nil {
+		return nil, err
+	}
+	return t, nil
+}
+```
+
+binary: のファイルの指定がよくわからんが、log-driver と関連がありそうなので、明日はそれを調査してみる。
+
+## 調査 3 (nerdctl 内で使用されているパッケージ fifo の動作を確認する。)
+
+...
+
+## 結論
+
+...
+
+## まとめ
+
+SDE のトラシュー力に憧れて自分もコンテナに関連する OSS の開発により積極的に従事したくなった。いや、従事します。
+
+## Misc 1
+
+`binary:///Users/haytok/workspace/nerdctl/_output/nerdctl?_NERDCTL_INTERNAL_LOGGING=%2Fvar%2Flib%2Fnerdctl%2F1935db59` における `1935db59` の値は一意に定まるハッシュ値の一部っぽい。
 
 ```bash
 [haytok@lima-default nerdctl]$ echo $(echo -n "/run/containerd/containerd.sock" | sha256sum | cut -c1-8)
@@ -407,24 +921,127 @@ CONTAINER ID    IMAGE                              COMMAND                   CRE
 
 現時点で動かしているコンテナ ID と照らし合わせた感じ、`/var/lib/nerdctl/1935db59` の配下にコンテナに関連するデータが突っ込まれていると考えられる。
 
-## 調査 2
+もう少し、`/var/lib/nerdctl/1935db59/containers/default/` に関して調査してみる。
 
-...
+今、バックグラウンドで起動しているコンテナ ID のフルは下記より確認できる。
 
-## 調査 3
+```bash
+[haytok@lima-default nerdctl]$ sudo _output/nerdctl ps --no-trunc
+0: In loadTask
+0: In loadTask
+CONTAINER ID                                                        IMAGE                              COMMAND                                                        CREATED              STATUS    PORTS    NAMES
+3209cc5c61e2adebd56cfa3a020e312a364d4faa934daa1c69252cdaed3d2ec6    docker.io/library/alpine:latest    "sh -c while true; do echo /'Hello, world/'; sleep 1; done"    About an hour ago    Up                 test
+```
 
-...
+このコンテナ ID がついた json log を確認すると、コンテナを起動する際に `sh -c` で指定したコマンドによる標準出力の結果が書き込まれていた。
 
+```bash
+[haytok@lima-default nerdctl]$ sudo head -5 /var/lib/nerdctl/1935db59/containers/default/3209cc5c61e2adebd56cfa3a020e312a364d4faa934daa1c69252cdaed3d2ec6/3209cc5c61e2adebd56cfa3a020e312a364d4faa934daa1c69252cdaed3d2ec6-json.log
+{"log":"/Hello, world/\n","stream":"stdout","time":"2024-03-26T14:45:56.643460042Z"}
+{"log":"/Hello, world/\n","stream":"stdout","time":"2024-03-26T14:45:57.647806795Z"}
+{"log":"/Hello, world/\n","stream":"stdout","time":"2024-03-26T14:45:58.650546172Z"}
+{"log":"/Hello, world/\n","stream":"stdout","time":"2024-03-26T14:45:59.65744747Z"}
+{"log":"/Hello, world/\n","stream":"stdout","time":"2024-03-26T14:46:00.664010059Z"}
+```
 
-## 結論
+これ、このコンテナに exec して `echo haytok` を実行すると、この log の内容が変わるかを確認してみる。
+結果、log には `echo haytok` による記録は確認することができなかった。
 
-...
+一方、下記のようにコンテナを起動し、標準出力に文字列を書き込むコマンドを実行したとする。
 
-## まとめ
+```bash
+[haytok@lima-default nerdctl]$ sudo _output/nerdctl run --rm -it alpine sh
+/ # echo hoge
+hoge
+/ # ls
+bin    dev    etc    home   lib    media  mnt    opt    proc   root   run    sbin   srv    sys    tmp    usr    var
+/ # echo risa
+risa
+/ #
+```
 
-SDE のトラシュー力に憧れて自分もコンテナに関連する OSS の開発により積極的に従事したくなった。いや、従事します。
+```bash
+[haytok@lima-default containerd]$ sudo ../nerdctl/_output/nerdctl ps --no-trunc
+CONTAINER ID                                                        IMAGE                              COMMAND                                                        CREATED          STATUS    PORTS    NAMES
+3209cc5c61e2adebd56cfa3a020e312a364d4faa934daa1c69252cdaed3d2ec6    docker.io/library/alpine:latest    "sh -c while true; do echo /'Hello, world/'; sleep 1; done"    2 hours ago      Up                 test
+b5a6199c3cc4f2409e09e2410d8038d3108ca234f64090108c788f35c9b1f0b5    docker.io/library/alpine:latest    "sh"                                                           4 minutes ago    Up                 alpine-b5a61
+[haytok@lima-default containerd]$ sudo cat /var/lib/nerdctl/1935db59/containers/default/b5a6199c3cc4f2409e09e2410d8038d3108ca234f64090108c788f35c9b1f0b5/b5a6199c3cc4f2409e09e2410d8038d3108ca234f64090108c788f35c9b1f0b5-json.log
+{"log":"/ # \u001b[6n\r/ # \u001b[Jecho hoge\n","stream":"stdout","time":"2024-03-26T16:25:47.252472554Z"}
+{"log":"hoge\n","stream":"stdout","time":"2024-03-26T16:25:47.25396863Z"}
+{"log":"/ # \u001b[6nls\n","stream":"stdout","time":"2024-03-26T16:26:01.943442994Z"}
+{"log":"\u001b[1;34mbin\u001b[m    \u001b[1;34mdev\u001b[m    \u001b[1;34metc\u001b[m    \u001b[1;34mhome\u001b[m   \u001b[1;34mlib\u001b[m    \u001b[1;34mmedia\u001b[m  \u001b[1;34mmnt\u001b[m    \u001b[1;34mopt\u001b[m    \u001b[1;34mproc\u001b[m   \u001b[1;34mroot\u001b[m   \u001b[1;34mrun\u001b[m    \u001b[1;34msbin\u001b[m   \u001b[1;34msrv\u001b[m    \u001b[1;34msys\u001b[m    \u001b[1;34mtmp\u001b[m    \u001b[1;34musr\u001b[m    \u001b[1;34mvar\u001b[m\n","stream":"stdout","time":"2024-03-26T16:26:01.948172886Z"}
+{"log":"/ # \u001b[6n\r/ # ls\u001b[J\r/ # echo hoge\u001b[J\u0008\u001b[J\u0008\u001b[J\u0008\u001b[J\u0008\u001b[Jrisa\n","stream":"stdout","time":"2024-03-26T16:26:24.657328604Z"}
+{"log":"risa\n","stream":"stdout","time":"2024-03-26T16:26:24.657492812Z"}
+```
 
-## Misc
+`-d` で動作させる時とそうでない時で動作が変わってそう。
+
+Docker でも動作確認をしたけど、-d でコンテナを起動した時に、そのコンテナで echo hoge をしても log には書き込まれへんのは期待された動作っぽい？？？
+
+## Misc 2
+
+syscall.Mkfifo() について調査してみる。
+
+そもそも、パイプを作成するためのコマンド / システムコールがある。
+
+```bash
+MKFIFO(1)                                                                         General Commands Manual                                                                        MKFIFO(1)
+
+NAME
+     mkfifo – make fifos
+
+SYNOPSIS
+     mkfifo [-m mode] fifo_name ...
+
+DESCRIPTION
+     The mkfifo utility creates the fifos requested, in the order specified.
+
+     The options are as follows:
+
+     -m      Set the file permission bits of the created fifos to the specified mode, ignoring the umask(2) of the calling process.  The mode argument takes any format that can be
+             specified to the chmod(1) command.  If a symbolic mode is specified, the op symbols ‘+’ (plus) and ‘-’ (hyphen) are interpreted relative to an assumed initial mode of “a=rw”
+             (read and write permissions for all).
+
+     If the -m option is not specified, fifos are created with mode 0666 modified by the umask(2) of the calling process.  The mkfifo utility requires write permission in the parent
+     directory.
+```
+
+```bash
+haytok ~/workspace/verification/fifo-verification
+> mkfifo fifo
+haytok ~/workspace/verification/fifo-verification
+> ls -la
+total 24
+drwxr-xr-x@ 6 haytok  staff   192  3 27 12:15 .
+drwxr-xr-x@ 3 haytok  staff    96  3 23 20:15 ..
+prw-r--r--@ 1 haytok  staff     0  3 27 12:15 fifo
+-rw-r--r--@ 1 haytok  staff   133  3 23 20:16 go.mod
+-rw-r--r--@ 1 haytok  staff   322  3 23 20:16 go.sum
+-rw-r--r--@ 1 haytok  staff  1418  3 25 13:22 main.go
+```
+
+```bash
+haytok ~/workspace/verification/fifo-verification
+> echo haytok >> fifo
+```
+
+```bash
+haytok ~/workspace/verification/fifo-verification
+> cat fifo
+haytok
+```
+
+- https://www.sambaiz.net/article/87/
+- https://qiita.com/richmikan@github/items/bb660a58690ac01ec295
+
+> 実はこれがmkfifoコマンドで作った不思議なファイル、「名前付きパイプ」の挙動です。
+>
+> 1. 名前付きパイプから読み出そうとすると、誰かがその名前付きパイプに書き込むまで待たされる。
+> 2. 名前付きパイプへ書き込もうとすると、誰かがその名前付きパイプから読み出すまで待たされる。
+
+## Other
+
+重要なコマンド
 
 ```bash
 sudo ./_output/nerdctl run --name test -d alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"
