@@ -13,6 +13,19 @@ This entry describes the basic commands and the configurations for developing [F
 
 ## Notes
 
+### Basic Settings
+
+When you build Finch on M3 MacBook Air, `vmType` and `rosetta` in `~/.finch/finch.yaml` must be set as follows.
+
+```yaml
+haytok ~/workspace/finch [main]
+> cat ~/.finch/finch.yaml
+cpus: 4
+memory: 6GiB
+vmType: vz
+rosetta: true
+```
+
 ### Basic commands
 
 Init VM
@@ -62,7 +75,7 @@ Access VM
 
 ```bash
 haytok finch [main]
-> LIMA_HOME=/Users/haytok/finch/_output/lima/data/ /Users/haytok/finch/_output/lima/bin/limactl shell finch
+> LIMA_HOME=/Users/haytok/workspace/finch/_output/lima/data/ /Users/haytok/workspace/finch/_output/lima/bin/limactl shell finch
 [haytok@lima-finch finch]$
 ```
 
