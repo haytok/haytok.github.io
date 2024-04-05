@@ -17,6 +17,29 @@ ogimage: "img/images/20240326.png"
 
 ## Summary
 
+`-d` を指定して起動したコンテナに対して、`nerdctl attach` を実行した際のエラーは下記の箇所で発生している。
+
+- https://github.com/containerd/fifo/blob/main/fifo.go#L85
+
+```golang
+			if err := syscall.Mkfifo(fn, uint32(perm&os.ModePerm)); err != nil && !os.IsExist(err) {
+				return nil, fmt.Errorf("error creating fifo %v: %w", fn, err)
+			}
+```
+
+エラーになる場合、`fn` に `binary:///Users/haytok/workspace/nerdctl/_output/nerdctl?_NERDCTL_INTERNAL_LOGGING=%2Fvar%2Flib%2Fnerdctl%2F1935db5` が入っており、これに対してパイプ (`fifo`) を作成することができず、標準出力用のファイルが作成されないため、エラーが発生する。
+
+この `fn` は `nerdctl run -d` や `nerdctl run -dt` を実行してコンテナを作成する際に作成される `Task` の `ioCreator` に前述の `binary` が指定されている。
+
+- https://github.com/containerd/nerdctl/blob/main/pkg/taskutil/taskutil.go#L40C1-L147C2
+
+そのため、`-d` および `-dt` を指定してコンテナが作成される処理における `ioCreator` を作成する際に `fifo` を指定するようにすると標準出力用のパイプが作成され、この変更を加えると、`-d` および `-dt` で起動したコンテナに `nerdctl attach` を実行することができる。
+
+## いまだにわからんこと
+
+- `fn` に `binary:///Users/haytok/workspace/nerdctl/_output/nerdctl?_NERDCTL_INTERNAL_LOGGING=%2Fvar%2Flib%2Fnerdctl%2F1935db5` が設定される条件
+- `-d` および `-dt` を指定して `nerdctl run` を実行する際に `ioCreator` に `fifo` が指定するように設定するので問題ないのか
+
 ## 開発環境 (読み飛ばしても可)
 
 開発環境は基本的に自前の M3 MacBook Air を使用している。
@@ -1039,6 +1062,65 @@ haytok
 > 1. 名前付きパイプから読み出そうとすると、誰かがその名前付きパイプに書き込むまで待たされる。
 > 2. 名前付きパイプへ書き込もうとすると、誰かがその名前付きパイプから読み出すまで待たされる。
 
+## Misc 3
+
+issue のコメントを 1 つ 1 つ確認していく。
+
+### コメント 1
+
+> Is this change compatible with nerdctl logs?
+>
+> My understanding is that when a container is launched with -d flag, the stdout and stderr streams will be forwarded to the logging driver, so when you attach to this container there are no output fifos to open. Would probably need to have the output streams directed to both fifos and logging driver to make it work. There is a discussion on #1946 to support this dual logging feature, but looks like there hasn't been much progress.
+
+訳
+
+> この変更は nerdctl ログと互換性がありますか？
+> 
+> 私の理解では、コンテナが -d フラグで起動されると、stdout と stderr ストリームはロギング・ドライバに転送されます。そのため、このコンテナにアタッチすると、開くべき出力fifosがありません。おそらく、これを動作させるには、出力ストリームをfifosとロギングドライバの両方に向ける必要があるでしょう。このデュアルロギング機能をサポートするための議論が#1946で行われていますが、あまり進展がないようです。
+
+パッチの適用前の状態で、-d を指定して作成したコンテナでは fifo は作成されない。
+
+けど、`nerdctl logs` を実行すると標準出力に対するる書き込みは確認できる。
+
+```bash
+[haytok@lima-default nerdctl]$ sudo ./_output/nerdctl ps
+CONTAINER ID    IMAGE                              COMMAND                   CREATED           STATUS    PORTS    NAMES
+240d6720d568    docker.io/library/alpine:latest    "sh -c while true; d…"    2 hours ago       Up                 test-dt
+588376287ab6    docker.io/library/alpine:latest    "sh -c while true; d…"    30 minutes ago    Up                 test
+[haytok@lima-default nerdctl]$
+[haytok@lima-default nerdctl]$
+[haytok@lima-default nerdctl]$ sudo ls /run/containerd/fifo
+1034591092  118231144  2164213081  2376111114  2554841498  267100849  313929042  345658729  3541429126	4161914190  4230603106	890640757  938856586
+[haytok@lima-default nerdctl]$ sudo ls /run/containerd/fifo/588376287ab6
+ls: cannot access '/run/containerd/fifo/588376287ab6': No such file or directory
+[haytok@lima-default nerdctl]$ sudo ls /var/lib/nerdctl/1935db59/containers/default/588376287ab6b23a48a45cd04e224c443ad3615ff3365bf43055f558874dee1b
+588376287ab6b23a48a45cd04e224c443ad3615ff3365bf43055f558874dee1b-json.log  hostname  log-config.json  oci-hook.startContainer.log  resolv.conf
+```
+
+デフォルトの log driver は `json-file` やけど、`<container ID>-json.log` が作成されている。
+
+- https://github.com/containerd/nerdctl/blob/main/docs/command-reference.md#container-management
+
+`nerdctl logs` 箱のファイルを読み出していると考えられる。
+
+パッチ適用して動作を確認してみる。
+
+```bash
+[haytok@lima-default nerdctl]$ sudo ./_output/nerdctl logs test-d
+[haytok@lima-default nerdctl]$
+```
+
+互換性はございません ... mharwani の言う通りです ...
+
+なので、mharwani の言うには、現状の動作として -d で起動したコンテナの標準出力と標準入力は logging driver に転送される。
+この動作に対する互換性を
+
+
+
+
+loggin driver の機能は残しつつ、-d で起動したコンテナから標準出力に書き込まれた内容を読み出す必要があります。
+そのための方法として、
+
 ## Other
 
 重要なコマンド
@@ -1047,3 +1129,12 @@ haytok
 sudo ./_output/nerdctl run --name test -d alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"
 sudo ./_output/nerdctl attach test
 ```
+
+
+
+# attach に失敗する。
+sudo ./_output/nerdctl run --name test -d alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"
+sudo ./_output/nerdctl run --name test-dt -dt alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"
+
+# フォアグラウンドで動作するので、attach できる。
+sudo ./_output/nerdctl run --name test-t -t alpine sh -c "while true; do echo /'Hello, world/'; sleep 1; done"
