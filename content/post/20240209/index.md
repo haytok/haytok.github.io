@@ -113,3 +113,7 @@ Setup for local tests using local common-tests repository.
 ```bash
 go mod edit -replace github.com/runfinch/common-tests=../common-tests
 ```
+
+### Edit
+
+- [Link](https://github.com/haytok/haytok.github.io/edit/main/content/post/20240209/index.md)
