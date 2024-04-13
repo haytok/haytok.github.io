@@ -79,6 +79,14 @@ haytok finch [main]
 [haytok@lima-finch finch]$
 ```
 
+### Tests
+
+Run specific tests
+
+```bash
+go test -run TestSettingsVMAction_run
+```
+
 ### Configuration 1
 
 The following network error may occur when executing the `make` command.
