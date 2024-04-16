@@ -3,7 +3,7 @@ draft: false
 title: "How to develop KubeArmor running in systemd mode on Amazon Linux 2023"
 date: 2023-09-19T21:58:19+09:00
 tags: ["KubeArmor", "Container", "Linux"]
-pinned: true
+pinned: false
 ogimage: "img/images/20230919.png"
 ---
 

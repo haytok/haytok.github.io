@@ -3,7 +3,7 @@ draft: false
 title: "How to run KubeArmor as systemd mode and develop"
 date: 2023-08-15T18:13:07+09:00
 tags: ["KubeArmor", "Kubernetes", "Linux"]
-pinned: true
+pinned: false
 ogimage: "img/images/20230815.png"
 ---
 

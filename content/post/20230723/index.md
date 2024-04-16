@@ -3,7 +3,7 @@ draft: false
 title: "How to set up an environment to develop KubeArmor"
 date: 2023-07-23T01:06:54+09:00
 tags: ["KubeArmor", "Kubernetes", "Linux"]
-pinned: true
+pinned: false
 ogimage: "img/images/20230723.png"
 ---
 

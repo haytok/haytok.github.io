@@ -3,7 +3,7 @@ draft: false
 title: "How to use KubeArmor to enforce security on containerized workloads"
 date: 2023-09-04T23:51:48+09:00
 tags: ["KubeArmor", "Container", "Linux"]
-pinned: true
+pinned: false
 ogimage: "img/images/20230904.png"
 ---
 

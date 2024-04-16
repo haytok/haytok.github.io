@@ -105,3 +105,20 @@ Setup for local tests using local common-tests repository.
 ```bash
 go mod edit -replace github.com/runfinch/common-tests=../common-tests
 ```
+
+fgrep 'physical id' /proc/cpuinfo | sort -u | wc -l
+
+go get やと binary はインストールされんかったが、go install やとインストールされた。
+
+```bash
+haytok ~/workspace/verification/gomock-verification
+> go get github.com/golang/mock/mockgen
+haytok ~/workspace/verification/gomock-verification
+> ls ~/go/bin/
+gopls		staticcheck
+haytok ~/workspace/verification/gomock-verification
+> go install github.com/golang/mock/mockgen
+haytok ~/workspace/verification/gomock-verification
+> ls ~/go/bin/
+gopls		mockgen		staticcheck
+```

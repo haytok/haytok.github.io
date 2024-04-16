@@ -3,7 +3,7 @@ draft: false
 title: "Linux Kernel Code Reading ..."
 date: 2024-02-14T01:16:33+09:00
 tags: ["Linux"]
-pinned: true
+pinned: false
 ogimage: "img/images/20240214.png"
 ---
 
