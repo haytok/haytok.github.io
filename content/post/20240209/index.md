@@ -79,6 +79,14 @@ haytok finch [main]
 [haytok@lima-finch finch]$
 ```
 
+### Tests
+
+Run specific tests
+
+```bash
+go test -run TestSettingsVMAction_run
+```
+
 ### Configuration 1
 
 The following network error may occur when executing the `make` command.
@@ -106,19 +114,6 @@ Setup for local tests using local common-tests repository.
 go mod edit -replace github.com/runfinch/common-tests=../common-tests
 ```
 
-fgrep 'physical id' /proc/cpuinfo | sort -u | wc -l
+### Edit
 
-go get やと binary はインストールされんかったが、go install やとインストールされた。
-
-```bash
-haytok ~/workspace/verification/gomock-verification
-> go get github.com/golang/mock/mockgen
-haytok ~/workspace/verification/gomock-verification
-> ls ~/go/bin/
-gopls		staticcheck
-haytok ~/workspace/verification/gomock-verification
-> go install github.com/golang/mock/mockgen
-haytok ~/workspace/verification/gomock-verification
-> ls ~/go/bin/
-gopls		mockgen		staticcheck
-```
+- [Link](https://github.com/haytok/haytok.github.io/edit/main/content/post/20240209/index.md)
