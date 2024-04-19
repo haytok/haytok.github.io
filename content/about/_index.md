@@ -14,6 +14,7 @@ date = "2021-04-30T00:00:00+08:00"
 - [fix: Fix to delete ~/.finch when uninstalling finch by haytok · Pull Request #703 · runfinch/finch](https://github.com/runfinch/finch/pull/703)
 - [docs: Update a link for the struct link with a full list of configura… by haytok · Pull Request #714 · runfinch/finch](https://github.com/runfinch/finch/pull/714)
 - [fix: Correct typo in type name of struct (NerdctlClientOuput) by haytok · Pull Request #743 · runfinch/finch](https://github.com/runfinch/finch/pull/743)
+- [fix: add finch vm settings subcommand by haytok · Pull Request #887 · runfinch/finch](https://github.com/runfinch/finch/pull/887)
 
 ##### Contributions to [runfinch/common-tests](https://github.com/runfinch/common-tests/commits?author=haytok)
 
