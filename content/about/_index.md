@@ -9,12 +9,12 @@ date = "2021-04-30T00:00:00+08:00"
 
 ##### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok)
 
-- [fix: Fix to remove the virtual machine storage in deps/finch-core/dow… by haytok · Pull Request #685 · runfinch/finch](https://github.com/runfinch/finch/pull/685)
-- [fix: Fix to be able to run finch build with --ssh option by haytok · Pull Request #696 · runfinch/finch](https://github.com/runfinch/finch/pull/696)
-- [fix: Fix to delete ~/.finch when uninstalling finch by haytok · Pull Request #703 · runfinch/finch](https://github.com/runfinch/finch/pull/703)
-- [docs: Update a link for the struct link with a full list of configura… by haytok · Pull Request #714 · runfinch/finch](https://github.com/runfinch/finch/pull/714)
-- [fix: Correct typo in type name of struct (NerdctlClientOuput) by haytok · Pull Request #743 · runfinch/finch](https://github.com/runfinch/finch/pull/743)
 - [fix: add finch vm settings subcommand by haytok · Pull Request #887 · runfinch/finch](https://github.com/runfinch/finch/pull/887)
+- [fix: Correct typo in type name of struct (NerdctlClientOuput) by haytok · Pull Request #743 · runfinch/finch](https://github.com/runfinch/finch/pull/743)
+- [docs: Update a link for the struct link with a full list of configura… by haytok · Pull Request #714 · runfinch/finch](https://github.com/runfinch/finch/pull/714)
+- [fix: Fix to delete ~/.finch when uninstalling finch by haytok · Pull Request #703 · runfinch/finch](https://github.com/runfinch/finch/pull/703)
+- [fix: Fix to be able to run finch build with --ssh option by haytok · Pull Request #696 · runfinch/finch](https://github.com/runfinch/finch/pull/696)
+- [fix: Fix to remove the virtual machine storage in deps/finch-core/dow… by haytok · Pull Request #685 · runfinch/finch](https://github.com/runfinch/finch/pull/685)
 
 ##### Contributions to [runfinch/common-tests](https://github.com/runfinch/common-tests/commits?author=haytok)
 
@@ -22,12 +22,12 @@ date = "2021-04-30T00:00:00+08:00"
 
 ##### Contributions to [kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/commits?author=haytok)
 
-- [fix(monitor): fix UpdateNsKeyMap and DestroyBPFMaps functions by haytok · Pull Request #1264 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1264)
-- [fix(CI): add the job to run go test on the KubeArmor/KubeArmor directory by haytok · Pull Request #1267 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1267)
-- [docs(fix typo): fix sample commands to get alerts for policies and te… by haytok · Pull Request #1362 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1362)
-- [fix(core): fix to prevent policies from being applied to containers t… by haytok · Pull Request #1406 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1406)
-- [fix(core): fix so that it can be restricted to matched paths and dire… by haytok · Pull Request #1461 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1461)
 - [fix(monitor): Added handling when casting a type in SystemMonitor fails by haytok · Pull Request #1472 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1472)
+- [fix(core): fix so that it can be restricted to matched paths and dire… by haytok · Pull Request #1461 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1461)
+- [fix(core): fix to prevent policies from being applied to containers t… by haytok · Pull Request #1406 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1406)
+- [docs(fix typo): fix sample commands to get alerts for policies and te… by haytok · Pull Request #1362 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1362)
+- [fix(CI): add the job to run go test on the KubeArmor/KubeArmor directory by haytok · Pull Request #1267 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1267)
+- [fix(monitor): fix UpdateNsKeyMap and DestroyBPFMaps functions by haytok · Pull Request #1264 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1264)
 
 #### WORK EXPERIENCE
 
