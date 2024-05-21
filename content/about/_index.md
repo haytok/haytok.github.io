@@ -9,7 +9,7 @@ date = "2021-04-30T00:00:00+08:00"
 
 ##### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok)
 
-- [docs: Add docs for finch vm settings command (#938) · runfinch/finch@7b68216](https://github.com/runfinch/finch/commit/7b682165b36b9fcff49c73bae3ccc65cbd9a9882)
+- [docs: Add docs for finch vm settings command by haytok · Pull Request #938 · runfinch/finch](https://github.com/runfinch/finch/pull/938)
 - [feat: Add the --format option to the finch version command by haytok · Pull Request #926 · runfinch/finch](https://github.com/runfinch/finch/pull/926)
 - [fix: add finch vm settings subcommand by haytok · Pull Request #887 · runfinch/finch](https://github.com/runfinch/finch/pull/887)
 - [fix: Correct typo in type name of struct (NerdctlClientOuput) by haytok · Pull Request #743 · runfinch/finch](https://github.com/runfinch/finch/pull/743)
