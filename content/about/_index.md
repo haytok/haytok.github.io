@@ -7,7 +7,7 @@ date = "2021-04-30T00:00:00+08:00"
 
 #### OSS EXPERIENCE
 
-##### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok)
+##### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok) (8)
 
 - [docs: Add docs for finch vm settings command by haytok · Pull Request #938 · runfinch/finch](https://github.com/runfinch/finch/pull/938)
 - [feat: Add the --format option to the finch version command by haytok · Pull Request #926 · runfinch/finch](https://github.com/runfinch/finch/pull/926)
@@ -18,11 +18,11 @@ date = "2021-04-30T00:00:00+08:00"
 - [fix: Fix to be able to run finch build with --ssh option by haytok · Pull Request #696 · runfinch/finch](https://github.com/runfinch/finch/pull/696)
 - [fix: Fix to remove the virtual machine storage in deps/finch-core/dow… by haytok · Pull Request #685 · runfinch/finch](https://github.com/runfinch/finch/pull/685)
 
-##### Contributions to [runfinch/common-tests](https://github.com/runfinch/common-tests/commits?author=haytok)
+##### Contributions to [runfinch/common-tests](https://github.com/runfinch/common-tests/commits?author=haytok) (1)
 
 - [test: Add a test for --ssh option in finch build command by haytok · Pull Request #101 · runfinch/common-tests](https://github.com/runfinch/common-tests/pull/101)
 
-##### Contributions to [kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/commits?author=haytok)
+##### Contributions to [kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/commits?author=haytok) (6)
 
 - [fix(monitor): Added handling when casting a type in SystemMonitor fails by haytok · Pull Request #1472 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1472)
 - [fix(core): fix so that it can be restricted to matched paths and dire… by haytok · Pull Request #1461 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1461)
