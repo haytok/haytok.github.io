@@ -7,8 +7,9 @@ date = "2021-04-30T00:00:00+08:00"
 
 #### OSS EXPERIENCE
 
-##### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok) (9)
+##### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok) (10)
 
+- [fix: Enable `finch support-bundle generate` to execute on Windows whe… by haytok · Pull Request #976 · runfinch/finch](https://github.com/runfinch/finch/pull/976)
 - [fix: Remove unnecessary error handling by haytok · Pull Request #961 · runfinch/finch](https://github.com/runfinch/finch/pull/961)
 - [docs: Add docs for finch vm settings command by haytok · Pull Request #938 · runfinch/finch](https://github.com/runfinch/finch/pull/938)
 - [feat: Add the --format option to the finch version command by haytok · Pull Request #926 · runfinch/finch](https://github.com/runfinch/finch/pull/926)
