@@ -20,8 +20,9 @@ date = "2021-04-30T00:00:00+08:00"
 - [fix: Fix to be able to run finch build with --ssh option by haytok · Pull Request #696 · runfinch/finch](https://github.com/runfinch/finch/pull/696)
 - [fix: Fix to remove the virtual machine storage in deps/finch-core/dow… by haytok · Pull Request #685 · runfinch/finch](https://github.com/runfinch/finch/pull/685)
 
-##### Contributions to [runfinch/common-tests](https://github.com/runfinch/common-tests/commits?author=haytok) (1)
+##### Contributions to [runfinch/common-tests](https://github.com/runfinch/common-tests/commits?author=haytok) (2)
 
+- [test: Add an e2e test for the COMPOSE_FILE environment variable in fi… by haytok · Pull Request #172 · runfinch/common-tests](https://github.com/runfinch/common-tests/pull/172)
 - [test: Add a test for --ssh option in finch build command by haytok · Pull Request #101 · runfinch/common-tests](https://github.com/runfinch/common-tests/pull/101)
 
 ##### Contributions to [kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/commits?author=haytok) (6)
