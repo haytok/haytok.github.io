@@ -57,8 +57,17 @@ date = "2021-04-30T00:00:00+08:00"
 - **September 2020** : **Software Development Engineer at [Hatena Co., Ltd.](https://hatena.co.jp/)**
   - Details are described in [this blog](https://dilmnqvo.hatenablog.com/entry/2020/09/11/182152).
 
+- **August 2020** ~ **September 2020** : **Software Development Engineer at [ChatWork Co., Ltd.](https://go.chatwork.com/)**
+  - We worked in teams to develop the front-end using `React` + `Redux` + `TypeScript`.
+
+- **August 2020** : **Software Development Engineer at [Nikkei Inc.](https://www.nikkei.co.jp/nikkeiinfo/)**
+  - We analysed data using various APIs such as Nikkei article data and huge amounts of access log data.
+
 - **September 2019** : **Software Development Engineer at [GMO Internet Group, Inc.](https://www.gmo.jp/)**
   - We deployed, maintained, operated, monitored, automated, measured performance, and diagnosed vulnerabilities of the web application.
+
+- **August 2019** : **Software Development Engineer at [e-Seikatsu Co.,Ltd.](https://www.e-seikatsu.info/)**
+  - I took part in an internship where I used natural language processing to process big data on real estate.
 
 ## Education
 
