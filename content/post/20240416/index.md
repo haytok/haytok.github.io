@@ -164,7 +164,7 @@ INFO[2024-04-16T09:01:24.322237430Z] starting containerd                        
 ...
 ```
 
-Create a `container` using `nerdctl`
+Create a `container` using [nerdctl](https://github.com/containerd/nerdctl)
 
 ```bash
 [ec2-user@ip-172-31-14-14 nerdctl]$ sudo _output/nerdctl run --rm --name test -it alpine sh
