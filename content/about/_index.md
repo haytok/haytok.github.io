@@ -49,6 +49,7 @@ date = "2021-04-30T00:00:00+08:00"
 - **May 2017 ~ April 2019** : **Software Development Engineer at [Osaka University Coop](https://www.osaka-univ.coop/)**
   - When received orders from Osaka University, I created web applications (EC sites, etc.) such as the [Osaka University Foundation for the Future](https://donation.miraikikin.osaka-u.ac.jp/osaka-u/entry.php?continueKind=0&paymentCode=1&supportCode=) and the on-campus goods procurement system. The development of the web application was carried out by a team. In the projects I was in charge of, I mainly developed web applications using `Angular 2` and the `Django REST framework`. I was responsible for both front-end and back-end development during the project. I also designed the DB scheme and did the `PostgreSQL` tuning.
 
+<!-- 
 #### Internship ([details](https://haytok.github.io/haytok/))
 
 - **September 2020** : **Software Development Engineer at [Howtelevision, Inc.](https://howtelevision.co.jp/)**
@@ -68,6 +69,7 @@ date = "2021-04-30T00:00:00+08:00"
 
 - **August 2019** : **Software Development Engineer at [e-Seikatsu Co.,Ltd.](https://www.e-seikatsu.info/)**
   - I took part in an internship where I used natural language processing to process big data on real estate.
+-->
 
 ## Education
 
@@ -90,9 +92,12 @@ date = "2021-04-30T00:00:00+08:00"
 
 ## Interests
 
-- Linux kernel | Container | Python | Golang | C | Web Application Programming | Low Level Programming
+- Container | Linux kernel | Golang | Python | C | Low Level Programming
 
 ## Others
 
+<!-- 
 - [Old Website](https://haytok.github.io/haytok/)
+-->
+
 - [Hatena Blog](https://dilmnqvo.hatenablog.com/)
