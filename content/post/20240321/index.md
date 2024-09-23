@@ -67,7 +67,7 @@ Below are the steps to build nerdctl and containerd in instance.
 
 ```bash
 sudo dnf update -y
-sudo dnf install -y make git golang which tree
+sudo dnf install -y make git golang which tree vim
 ```
 
 Build [nerdctl](https://github.com/containerd/nerdctl)
