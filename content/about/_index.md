@@ -7,8 +7,9 @@ date = "2021-04-30T00:00:00+08:00"
 
 ### OSS EXPERIENCE
 
-#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (1)
+#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (2)
 
+- [fix: Allow to delete images when names of images are short digest ids… by haytok · Pull Request #3519 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3519)
 - [fix: Cleaning up orphaned directories and files when containers creat… by haytok · Pull Request #3457 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3457)
 
 #### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok) (11)
