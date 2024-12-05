@@ -7,8 +7,9 @@ date = "2021-04-30T00:00:00+08:00"
 
 ### OSS EXPERIENCE
 
-#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (4)
+#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (6)
 
+- [add fields such as CONTAINER_NAME to journald log entries sent to by containers by haytok · Pull Request #3667 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3667)
 - [fix: not to be deleted a container created with --rm when detaching by haytok · Pull Request #3614 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3614)
 - [fix: Allow to untag images associated with running or paused containe… by haytok · Pull Request #3602 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3602)
 - [fix: Allow to delete images when names of images are short digest ids… by haytok · Pull Request #3519 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3519)
