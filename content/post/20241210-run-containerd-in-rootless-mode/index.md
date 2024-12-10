@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 title: "How to run containerd in rootless mode"
 date: 2024-12-09T15:48:12Z
 tags: ["containerd", "nerdctl", "rootless"]
