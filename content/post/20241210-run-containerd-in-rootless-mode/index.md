@@ -25,7 +25,7 @@ aws ec2 run-instances \
     --image-id $AMI_ID \
     --count 1 \
     --iam-instance-profile Name=$IAM_ROLE \
-    --instance-type $INSTANCE_CLAS \
+    --instance-type $INSTANCE_CLASS \
     --key-name $KEY_NAME \
     --security-group-ids $SG_ID \
     --subnet-id $SUBNET_ID \
@@ -271,14 +271,14 @@ systemd─┬─2*[agetty]
 `nerdctl` can be run without `sudo`, so the following result shows that `containerd` can be run in `rootless mode`.
 
 ```bash
-[ec2-user@ip-172-31-40-91 ~]$ ~/nerdctl/_output/nerdctl ps
+[ec2-user@ip-172-31-40-91 ~]$ nerdctl ps
 CONTAINER ID    IMAGE    COMMAND    CREATED    STATUS    PORTS    NAMES
 ```
 
 Pull an images
 
 ```bash
-[ec2-user@ip-172-31-40-91 ~]$ ~/nerdctl/_output/nerdctl pull alpine
+[ec2-user@ip-172-31-40-91 ~]$ nerdctl pull alpine
 docker.io/library/alpine:latest:                                                  resolved       |++++++++++++++++++++++++++++++++++++++|
 index-sha256:21dc6063fd678b478f57c0e13f47560d0ea4eeba26dfc947b2a4f81f686b9f45:    done           |++++++++++++++++++++++++++++++++++++++|
 manifest-sha256:2c43f33bd1502ec7818bce9eea60e062d04eeadc4aa31cad9dabecb1e48b647b: done           |++++++++++++++++++++++++++++++++++++++|
@@ -326,6 +326,7 @@ However, `nerdctl build` fails because `buildkitd` is not working.
 ```bash
 [ec2-user@ip-172-31-40-91 ~]$ cat Dockerfile
 FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye
+
 [ec2-user@ip-172-31-40-91 ~]$ nerdctl build -t test .
 ERRO[0000] `buildctl` needs to be installed and `buildkitd` needs to be running, see https://github.com/moby/buildkit , and `containerd-rootless-setuptool.sh install-buildkit` for OCI worker or `containerd-rootless-setuptool.sh install-buildkit-containerd` for containerd worker  error="failed to ping to host unix:///run/user/1000/buildkit-default/buildkitd.sock: exec: \"buildctl\": executable file not found in $PATH\nfailed to ping to host unix:///run/user/1000/buildkit/buildkitd.sock: exec: \"buildctl\": executable file not found in $PATH"
 FATA[0000] no buildkit host is available, tried 2 candidates: failed to ping to host unix:///run/user/1000/buildkit-default/buildkitd.sock: exec: "buildctl": executable file not found in $PATH
