@@ -11,8 +11,9 @@ date = "2021-04-30T00:00:00+08:00"
 
 - [fix: allow to propagate the address specified in -p option by haytok · Pull Request #477 · rootless-containers/rootlesskit](https://github.com/rootless-containers/rootlesskit/pull/477)
 
-#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (9)
+#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (10)
 
+- [fix: save multiple images for the same image id to a tar archive by haytok · Pull Request #3822 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3822)
 - [fix: clean up an orphaned etchosts directory for the container that failed to create by haytok · Pull Request #3819 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3819)
 - [add fields such as CONTAINER_NAME to journald log entries sent to by containers by haytok · Pull Request #3667 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3667)
 - [fix: not to be deleted a container created with --rm when detaching by haytok · Pull Request #3614 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3614)
