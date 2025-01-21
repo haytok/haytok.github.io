@@ -338,7 +338,7 @@ FATA[0000] no buildkit host is available, tried 2 candidates: failed to ping to 
 failed to ping to host unix:///run/user/1000/buildkit/buildkitd.sock: exec: "buildctl": executable file not found in $PATH
 ```
 
-Install `buildkitd`
+Install `buildkitd` (version `0.18.1`)
 
 ```bash
 cd ~
