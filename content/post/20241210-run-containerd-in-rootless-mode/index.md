@@ -222,6 +222,10 @@ index 27627640..d8bc2853 100755
 Run [containerd-rootless-setuptool.sh](https://github.com/containerd/nerdctl/blob/main/extras/rootless/containerd-rootless-setuptool.sh)
 
 ```bash
+# Setup the path
+sudo cp ~/nerdctl/extras/rootless/containerd-rootless* /usr/local/bin
+
+# Install
 [ec2-user@ip-172-31-40-91 rootless]$ ./containerd-rootless-setuptool.sh install
 [INFO] Checking RootlessKit functionality
 [INFO] Checking cgroup v2
@@ -311,7 +315,7 @@ FATA[0000] failed to create shim task: OCI runtime create failed: unable to retr
 Install `runc` using [install-runc](https://github.com/containerd/containerd/blob/main/script/setup/install-runc)
 
 ```bash
-~/containerd/script/setup/install-run
+~/containerd/script/setup/install-runc
 ```
 
 The container could be started in rootless mode.
