@@ -99,8 +99,9 @@ Buiild and Install [slirp4netns](https://github.com/rootless-containers/slirp4ne
 ```bash
 cd ~
 git clone https://github.com/rootless-containers/slirp4netns.git
+cd slirp4netns/
 ./autogen.sh
-./configure --prefix=/usr LDFLAGS=-static
+./configure --prefix=/usr
 sudo make install
 ```
 
