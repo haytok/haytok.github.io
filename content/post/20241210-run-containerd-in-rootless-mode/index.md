@@ -352,7 +352,7 @@ sudo cp bin/buildctl /usr/local/bin/
 Run `buildkitd` using Run `buildkitd` using [containerd-rootless-setuptool.sh](https://github.com/containerd/nerdctl/blob/main/extras/rootless/containerd-rootless-setuptool.sh) install-buildkit
 
 ```bash
-[ec2-user@ip-172-31-40-91 ~]$ ./nerdctl/extras/rootless/containerd-rootless-setuptool.sh install-buildkit
+[ec2-user@ip-172-31-40-91 ~]$ ~/nerdctl/extras/rootless/containerd-rootless-setuptool.sh install-buildkit
 [INFO] Creating "/home/ec2-user/.config/systemd/user/buildkit.service"
 [INFO] Starting systemd unit "buildkit.service"
 + systemctl --user start buildkit.service
