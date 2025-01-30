@@ -1,6 +1,6 @@
 ---
 draft: false
-title: "How to develop containerd and nerdctl on Amazon Linux 2023"
+title: "How to develop containerd and nerdctl \non Amazon Linux 2023"
 date: 2024-04-16T09:47:48Z
 tags: ["containerd", "nerdctl"]
 pinned: true
