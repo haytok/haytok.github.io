@@ -44,7 +44,7 @@ sudo dnf update
 Install tools to build `containerd`, `nerdctl`, and so on ...
 
 ```bash
-sudo dnf install -y git make gcc libseccomp-devel iptables golang glib2-devel libcap-devel meson ninja-build
+sudo dnf install -y git make gcc libseccomp-devel iptables golang glib2-devel libcap-devel meson ninja-build tmux
 sudo dnf groupinstall -y "Development Tools"
 ```
 
