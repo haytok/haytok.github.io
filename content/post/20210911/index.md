@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "自作 OS のリポジトリの \nREADME.md を自動更新する"
 date: 2021-09-10T15:50:53Z
 tags: ["GitHub", "CI", "CD", "Python"]

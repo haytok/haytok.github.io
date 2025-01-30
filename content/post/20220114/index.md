@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "Vercel のドキュメントの修正を\n Vercel Support に依頼してみた"
 date: 2022-01-13T23:09:26Z
 tags: ["Vercel"]

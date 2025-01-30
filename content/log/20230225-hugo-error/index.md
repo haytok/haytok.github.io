@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "Hugo のバージョンをアップグレードできない事象の解消方法"
 date: 2023-02-25T09:52:52Z
 tags: ["Hugo"]

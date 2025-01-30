@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "自作ブログの開発環境を\n Docker で移行した"
 date: 2021-06-26T20:39:56Z
 tags: ["make", "Docker", "Hugo"]

@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "Setup Shared Ubuntu on EC2"
 date: 2023-03-01T16:53:34Z
 tags: []

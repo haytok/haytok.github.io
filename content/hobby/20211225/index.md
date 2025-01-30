@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "持っているマンガ"
 date: 2021-12-25T09:27:59Z
 ---

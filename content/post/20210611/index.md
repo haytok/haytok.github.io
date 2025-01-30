@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "Hugo のテンプレートを修正してみた"
 date: 2021-06-11T17:37:01+09:00
 tags: ["Hugo"]

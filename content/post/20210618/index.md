@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "システムコール番号を使って \nwrite システムコールを呼び出す"
 date: 2021-06-18T02:21:38+09:00
 tags: ["C", "Assembler"]

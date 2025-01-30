@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: ".gitconfig を使って untracked files \nのみを退避させる"
 date: 2021-06-13T06:13:26+09:00
 tags: ["git"]

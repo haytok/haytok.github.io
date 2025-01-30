@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "このブログを運用する目的"
 date: 2021-06-21T14:53:48Z
 tags: ["Poem"]

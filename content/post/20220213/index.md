@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "cobra のソースコードを読んで\n調査をしてみた"
 date: 2022-02-12T17:02:25Z
 tags: ["Golang", "cobra"]

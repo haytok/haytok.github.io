@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "自己紹介 (大学・大学院時代)"
 date: 2021-12-03T19:02:51Z
 tags: ["Poem"]

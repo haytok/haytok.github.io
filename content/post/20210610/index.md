@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "関数型プログラミングに入門した"
 date: 2021-06-10T01:34:28+09:00
 tags: ["OCaml"]

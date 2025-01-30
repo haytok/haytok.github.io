@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "「12 ステップで作る 組込みOS自作入門」\nを読んでOS を作成してみた"
 date: 2022-10-17T16:00:17Z
 tags: ["OS", "Kernel", "C"]

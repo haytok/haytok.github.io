@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "今年中に一つでも多く勉強したいこと"
 date: 2021-05-18T04:27:07+09:00
 tags: ["Study"]

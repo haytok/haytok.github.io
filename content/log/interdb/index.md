@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "The Internals of PostgreSQL"
 date: 2022-06-27T10:44:31Z
 tags: ["PostgreSQL"]

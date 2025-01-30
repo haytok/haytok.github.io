@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "bash の表示の微修正"
 date: 2023-02-25T17:43:38Z
 tags: ["bash"]

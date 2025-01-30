@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "振り返り"
 date: 2021-05-12T03:07:55+09:00
 tags: ["Study"]
