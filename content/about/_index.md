@@ -3,7 +3,12 @@ title = "About"
 date = "2021-04-30T00:00:00+08:00"
 +++
 
-## Experience
+## Profile
+
+I'm really passionate for container technologies, actively contributing to the OSS related to containers. I recently contribute to [nerdctl](https://github.com/containerd/nerdctl) in [the containerd project](https://github.com/containerd/), and I'm a maintainer of [Finch](https://github.com/runfinch/finch).
+Also, as a Cloud Support Engineer at AWS, I specialize in container-related services including [Amazon ECS](https://aws.amazon.com/ecs/), [Amazon EKS](https://aws.amazon.com/eks/), and [AWS Fargate](https://aws.amazon.com/fargate/), providing technical expertise to customers. 
+
+## EXPERIENCE
 
 ### OSS EXPERIENCE
 
@@ -57,7 +62,9 @@ date = "2021-04-30T00:00:00+08:00"
 ## WORK EXPERIENCE
 
 - **August 2023 ~ Present** : **Cloud Support Engineer at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)**
-  - When AWS Support receive customer inquiries, I reproduce the problem, identify the root cause, and provide the solutions. I primarily provide technical support for products such as `RDS for MySQL` and `Aurora MySQL`.
+  - When AWS Support receive customer inquiries, I reproduce the problem, identify the root cause, and provide the solutions. 
+  - I primarily provide technical support for products such as `Amazon ECS`, `Amazon EKS`, `AWS Fargate`, and `AWS CloudFormation`.
+  - Previously, I provided technical support for products such as `RDS for MySQL` and `Aurora MySQL`.
 - **April 2022 ~ July 2023** : **Cloud Support Associate at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)**
 
 ## Part Time Job
@@ -90,7 +97,7 @@ date = "2021-04-30T00:00:00+08:00"
   - I took part in an internship where I used natural language processing to process big data on real estate.
 -->
 
-## Education
+## EDUCATION
 
 - **April 2020 ~ March 2022** : **Graduate School of Engineering at [Osaka University](https://www.osaka-u.ac.jp/)**
   - Division of Electrical, Electronic, and Infocommunications Engineering
@@ -99,7 +106,7 @@ date = "2021-04-30T00:00:00+08:00"
 - **April 2016 ~ March 2020** : **School of Engineering at [Osaka University](https://www.osaka-u.ac.jp/)**
   - Division of Electronic and Information Engineering
 
-## Publications
+## PUBLICATIONS
 
 - Hayato Kiwata, Koji Igarashi, Noboru Yoshikane, "[Control of SDN optical networks using public cloud container services,](https://www.ieice.org/ken/paper/20220128fC7Q/)" IEICE Tech. Rep., vol. 121, no. 350, PN2021-41, pp. 46-50, Jan. 2022.
 
@@ -109,11 +116,11 @@ date = "2021-04-30T00:00:00+08:00"
 
 - H. Kiwata, M. Kikuta, M. Sigihara, and K. Igarashi, "High-speed (800 ps) and ultra-long-period (0.8 sec) characterization of laser phase noise by heterodyne detection with FPGA-implemented data acquisition," in OSA Advanced Photonics Congress (AP) 2020 (IPR, NP, NOMA, Networks, PVLED, PSC, SPPCom, SOF), L. Caspani, A. Tauke-Pedretti, F. Leo, and B. Yang, eds., OSA Technical Digest (Optical Society of America, 2020), paper SpM3I.4, doi: [10.1364/SPPCOM.2020.SpM3I.4](https://www.osapublishing.org/abstract.cfm?uri=SPPCom-2020-SpM3I.4)
 
-## Interests
+## INTERESTS
 
 - Container | Linux kernel | Golang | Python | C | Low Level Programming
 
-## Others
+## OTHERS
 
 <!-- 
 - [Old Website](https://haytok.github.io/haytok/)
