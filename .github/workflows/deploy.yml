@@ -24,37 +24,37 @@ jobs:
         with:
           submodules: true  # Fetch Hugo themes
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
-          token: ${{secrets.GITHUB_TOKEN}}
+          # token: ${{secrets.GITHUB_TOKEN}}
 
       # OGP の作成
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.9"
+      # - name: Setup Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: "3.9"
 
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r scripts/ogp/requirements.txt
+      # - name: Install Dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install -r scripts/ogp/requirements.txt
 
-      - name: Run main.py
-        id: latest_data_id
-        run: |
-          cd scripts/ogp/
-          python main.py
+      # - name: Run main.py
+      #   id: latest_data_id
+      #   run: |
+      #     cd scripts/ogp/
+      #     python main.py
 
-      - name: Update README.md
-        run: |
-          git add -N static/img/images/*.png
-          if ! git diff --exit-code --quiet static/img/images/*.png
-          then
-            git config --global user.name haytok
-            git config --global user.email haytok@users.noreply.github.com
-            git pull
-            git add static/img/images/*.png
-            git commit -m 'update OGP images'
-            git push origin main
-          fi
+      # - name: Update README.md
+      #   run: |
+      #     git add -N static/img/images/*.png
+      #     if ! git diff --exit-code --quiet static/img/images/*.png
+      #     then
+      #       git config --global user.name haytok
+      #       git config --global user.email haytok@users.noreply.github.com
+      #       git pull
+      #       git add static/img/images/*.png
+      #       git commit -m 'update OGP images'
+      #       git push origin main
+      #     fi
 
       # ビルドとデプロイ
       - name: Setup Hugo
