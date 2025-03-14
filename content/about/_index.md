@@ -120,10 +120,10 @@ Also, as a Cloud Support Engineer at AWS, I specialize in container-related serv
 
 - Container | Linux kernel | Golang | Python | C | Low Level Programming
 
-## OTHERS
+<!-- ## OTHERS -->
 
 <!-- 
 - [Old Website](https://haytok.github.io/haytok/)
 -->
 
-- [Hatena Blog](https://dilmnqvo.hatenablog.com/)
+<!-- - [Hatena Blog](https://dilmnqvo.hatenablog.com/) -->
