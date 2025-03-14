@@ -5,7 +5,7 @@ date = "2021-04-30T00:00:00+08:00"
 
 ## Profile
 
-I'm really passionate for container technologies, actively contributing to the OSS related to containers. I recently contribute to [nerdctl](https://github.com/containerd/nerdctl) in [the containerd project](https://github.com/containerd/), and I'm a maintainer of [Finch](https://github.com/runfinch/finch).
+I'm really passionate about container technologies, actively contributing to the OSS related to containers. I recently contribute to [nerdctl](https://github.com/containerd/nerdctl) in [the containerd project](https://github.com/containerd/), and I'm a maintainer of [Finch](https://github.com/runfinch/finch).
 Also, as a Cloud Support Engineer at AWS, I specialize in container-related services including [Amazon ECS](https://aws.amazon.com/ecs/), [Amazon EKS](https://aws.amazon.com/eks/), and [AWS Fargate](https://aws.amazon.com/fargate/), providing technical expertise to customers. 
 
 ## EXPERIENCE
