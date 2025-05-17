@@ -20,8 +20,9 @@ Also, as a Cloud Support Engineer at AWS, I specialize in container-related serv
 
 - [fix: allow to propagate the address specified in -p option by haytok · Pull Request #477 · rootless-containers/rootlesskit](https://github.com/rootless-containers/rootlesskit/pull/477)
 
-#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (12)
+#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (13)
 
+- [test: update test logic in TestTestParseFlagPWithPlatformSpec by haytok · Pull Request #4261 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4261)
 - [test: update test logic in TestParsePortsLabel by haytok · Pull Request #4260 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4260)
 - [Fix port forwarding not working for non-127.0.0.1 localhost in rootless by haytok · Pull Request #3831 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3831)
 - [fix: save multiple images for the same image id to a tar archive by haytok · Pull Request #3822 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3822)
