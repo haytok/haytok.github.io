@@ -20,8 +20,9 @@ Also, as a Cloud Support Engineer at AWS, I specialize in container-related serv
 
 - [fix: allow to propagate the address specified in -p option by haytok · Pull Request #477 · rootless-containers/rootlesskit](https://github.com/rootless-containers/rootlesskit/pull/477)
 
-#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (14)
+#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (15)
 
+- [test: update test functions in portutil_test.go by haytok · Pull Request #4273 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4273)
 - [test: refactor TestTestParseFlagPWithPlatformSpec and TestParsePortsL… by haytok · Pull Request #4263 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4263)
 - [test: update test logic in TestTestParseFlagPWithPlatformSpec by haytok · Pull Request #4261 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4261)
 - [test: update test logic in TestParsePortsLabel by haytok · Pull Request #4260 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4260)
