@@ -20,8 +20,9 @@ Also, as a Cloud Support Engineer at AWS, I specialize in container-related serv
 
 - [fix: allow to propagate the address specified in -p option by haytok · Pull Request #477 · rootless-containers/rootlesskit](https://github.com/rootless-containers/rootlesskit/pull/477)
 
-#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (20)
+#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (21)
 
+- [fix: allow storing additional network info in network-config.json by haytok · Pull Request #4385 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4385)
 - [fix: allow containers to start using a large numbers of ports by haytok · Pull Request #4290 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4290)
 - [test: refactor TestNetworkInspect in network_inspect_test.go by haytok · Pull Request #4310 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4310)
 - [fix: display containers belonging to multiple networks in nerdctl network inspect by haytok · Pull Request #4309 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4309)
