@@ -47,5 +47,12 @@
     {{ end }}
     <!-- <meta property="og:description" content="{{ .Description }}" /> -->
 
+    {{ if .Store.Get "hasMermaid" }}
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    {{ end }}
+
     {{ template "_internal/google_analytics.html" . }}
 </head>
