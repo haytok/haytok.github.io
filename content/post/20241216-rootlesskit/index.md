@@ -337,3 +337,7 @@ DEBUG Child] 0: In handleConnectRequest, before Sendmsg Child namespace 内で�
 {{< /details >}}
 
 ---
+
+## Ref
+
+- [nerdctl/docs/rootless.md](https://github.com/containerd/nerdctl/blob/781eeff125d528f68a5e4d8b13f5d821b802fdde/docs/rootless.md#rootlesskit-network-design)
