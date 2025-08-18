@@ -51,6 +51,10 @@ Docker コンテナはデフォルトでは root ユーザで実行されるが�
 - [Ns in Container - haytok's Website](https://haytok.github.io/post/20241211-ns-in-container/)
 - [Network Namespace を使用してコンテナのネットワークを理解する - haytok's Website](https://haytok.github.io/post/20241120-netns/)
 
+また、rootless コンテナのネットワークについては下記の記事が非常に参考になりました。
+
+- [インターンレポート: RootlessコンテナのTCP/IP高速化](https://medium.com/nttlabs/accelerating-rootless-container-network-29d0e908dda4)
+
 ## fd passing
 
 rootless コンテナの内部で使用されている fd passing の基本的な内容は下記のリポジトリで公開しているので、必要に応じて参照してください。
