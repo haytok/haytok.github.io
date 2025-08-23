@@ -1,5 +1,4 @@
-VERSION=v0.148.2
-IMAGE=ghcr.io/gohugoio/hugo:$(VERSION)
+IMAGE=hugo-local
 PORT=1313
 
 DOCKER_CMD := $(shell command -v docker 2>/dev/null)
@@ -18,15 +17,19 @@ endif
 $(eval USER_ID := $(shell id -u $(USER)))
 $(eval GROUP_ID := $(shell id -g $(USER)))
 
+.PHONY: build-image
+build-image:
+	$(CONTAINER_CMD) build -t $(IMAGE) .
+
 .PHONY: server
-server:
+server: build-image
 	$(CONTAINER_CMD) run --rm -it \
 		-v $(PWD):/project \
 		-p $(PORT):1313 \
 		$(IMAGE) server
 
 .PHONY: new
-new:
+new: build-image
 	@echo "Directory name is $(D)"
 
 	mkdir -p content/post/$(D)
@@ -41,7 +44,7 @@ new:
 	code "content/post/$(D)/index.md";
 
 .PHONY: scraps
-scraps:
+scraps: build-image
 	@echo "Directory name is $(D)"
 
 	mkdir -p content/scraps/$(D)
@@ -56,7 +59,7 @@ scraps:
 	code "content/scraps/$(D)/index.md";
 
 .PHONY: log
-log:
+log: build-image
 	@echo "Directory name is $(D)"
 
 	mkdir -p content/log/$(D)
@@ -71,7 +74,7 @@ log:
 	code "content/log/$(D)/index.md";
 
 .PHONY: build
-build:
+build: build-image
 	$(CONTAINER_CMD) run --rm -it \
 		-v /etc/group:/etc/group:ro \
 		-v /etc/passwd:/etc/passwd:ro \
