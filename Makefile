@@ -1,18 +1,29 @@
-# OLD_VERSION=0.65.3
-# OLD_VERSION=0.83.1
-VERSION=0.101.0
-# VERSION=0.110.0 # not released Docker image
+VERSION=v0.148.2
+IMAGE=ghcr.io/gohugoio/hugo:$(VERSION)
 PORT=1313
+
+DOCKER_CMD := $(shell command -v docker 2>/dev/null)
+FINCH_CMD  := $(shell command -v finch 2>/dev/null)
+
+ifeq ($(DOCKER_CMD),)
+  ifeq ($(FINCH_CMD),)
+    $(error Neither docker nor finch is available in PATH)
+  else
+    CONTAINER_CMD := finch
+  endif
+else
+  CONTAINER_CMD := docker
+endif
 
 $(eval USER_ID := $(shell id -u $(USER)))
 $(eval GROUP_ID := $(shell id -g $(USER)))
 
 .PHONY: server
 server:
-	docker run --rm -it \
-		-v $(PWD):/src \
+	$(CONTAINER_CMD) run --rm -it \
+		-v $(PWD):/project \
 		-p $(PORT):1313 \
-		klakegg/hugo:$(VERSION) server
+		$(IMAGE) server
 
 .PHONY: new
 new:
@@ -20,12 +31,12 @@ new:
 
 	mkdir -p content/post/$(D)
 
-	docker run --rm -it \
+	$(CONTAINER_CMD) run --rm -it \
 		-v /etc/group:/etc/group:ro \
 		-v /etc/passwd:/etc/passwd:ro \
-		-v $(PWD):/src \
+		-v $(PWD):/project \
 		-u $(USER_ID):$(GROUP_ID) \
-		klakegg/hugo:$(VERSION) new "content/post/$(D)/index.md"
+		$(IMAGE) new "content/post/$(D)/index.md"
 
 	code "content/post/$(D)/index.md";
 
@@ -35,12 +46,12 @@ scraps:
 
 	mkdir -p content/scraps/$(D)
 
-	docker run --rm -it \
+	$(CONTAINER_CMD) run --rm -it \
 		-v /etc/group:/etc/group:ro \
 		-v /etc/passwd:/etc/passwd:ro \
-		-v $(PWD):/src \
+		-v $(PWD):/project \
 		-u $(USER_ID):$(GROUP_ID) \
-		klakegg/hugo:$(VERSION) new "content/scraps/$(D)/index.md"
+		$(IMAGE) new "content/scraps/$(D)/index.md"
 
 	code "content/scraps/$(D)/index.md";
 
@@ -50,20 +61,20 @@ log:
 
 	mkdir -p content/log/$(D)
 
-	docker run --rm -it \
+	$(CONTAINER_CMD) run --rm -it \
 		-v /etc/group:/etc/group:ro \
 		-v /etc/passwd:/etc/passwd:ro \
-		-v $(PWD):/src \
+		-v $(PWD):/project \
 		-u $(USER_ID):$(GROUP_ID) \
-		klakegg/hugo:$(VERSION) new "content/log/$(D)/index.md"
+		$(IMAGE) new "content/log/$(D)/index.md"
 
 	code "content/log/$(D)/index.md";
 
 .PHONY: build
 build:
-	docker run --rm -it \
+	$(CONTAINER_CMD) run --rm -it \
 		-v /etc/group:/etc/group:ro \
 		-v /etc/passwd:/etc/passwd:ro \
-		-v $(PWD):/src \
+		-v $(PWD):/project \
 		-u $(USER_ID):$(GROUP_ID) \
-		klakegg/hugo:$(VERSION)
+		$(IMAGE)
