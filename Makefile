@@ -1,4 +1,5 @@
-IMAGE=hugo-local
+IMAGE_NAME=haytok.github.io
+CONTAINER_NAME=haytok.github.io
 PORT=1313
 
 DOCKER_CMD := $(shell command -v docker 2>/dev/null)
@@ -19,14 +20,15 @@ $(eval GROUP_ID := $(shell id -g $(USER)))
 
 .PHONY: build-image
 build-image:
-	$(CONTAINER_CMD) build -t $(IMAGE) .
+	$(CONTAINER_CMD) build -t $(IMAGE_NAME) .
 
 .PHONY: server
 server: build-image
 	$(CONTAINER_CMD) run --rm -it \
+		--name $(CONTAINER_NAME) \
 		-v $(PWD):/project \
 		-p $(PORT):1313 \
-		$(IMAGE) server
+		$(IMAGE_NAME) server --bind 0.0.0.0
 
 .PHONY: new
 new: build-image
@@ -39,7 +41,7 @@ new: build-image
 		-v /etc/passwd:/etc/passwd:ro \
 		-v $(PWD):/project \
 		-u $(USER_ID):$(GROUP_ID) \
-		$(IMAGE) new "content/post/$(D)/index.md"
+		$(IMAGE_NAME) new "content/post/$(D)/index.md"
 
 	code "content/post/$(D)/index.md";
 
@@ -54,7 +56,7 @@ scraps: build-image
 		-v /etc/passwd:/etc/passwd:ro \
 		-v $(PWD):/project \
 		-u $(USER_ID):$(GROUP_ID) \
-		$(IMAGE) new "content/scraps/$(D)/index.md"
+		$(IMAGE_NAME) new "content/scraps/$(D)/index.md"
 
 	code "content/scraps/$(D)/index.md";
 
@@ -69,7 +71,7 @@ log: build-image
 		-v /etc/passwd:/etc/passwd:ro \
 		-v $(PWD):/project \
 		-u $(USER_ID):$(GROUP_ID) \
-		$(IMAGE) new "content/log/$(D)/index.md"
+		$(IMAGE_NAME) new "content/log/$(D)/index.md"
 
 	code "content/log/$(D)/index.md";
 
@@ -80,4 +82,4 @@ build: build-image
 		-v /etc/passwd:/etc/passwd:ro \
 		-v $(PWD):/project \
 		-u $(USER_ID):$(GROUP_ID) \
-		$(IMAGE)
+		$(IMAGE_NAME)
