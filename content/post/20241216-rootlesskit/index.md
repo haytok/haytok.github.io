@@ -1,6 +1,6 @@
 ---
 draft: false
-title: "recap for the PR fix: allow to propagate the address specified in -p option #477 in rootlesskit"
+title: "Recap for the PR in rootlesskit (fix: allow to propagate the address specified in -p option)"
 date: 2024-12-15T04:35:50Z
 tags: ["containerd", "nerdctl", "rootless", "rootlesskit"]
 pinned: false

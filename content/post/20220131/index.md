@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 title: "修士課程で初めて\n国内の研究会で発表をしてきた"
 date: 2022-01-30T16:59:20Z
 tags: ["Research"]
