@@ -7,8 +7,8 @@
 {{ with .Site.Params.Twitter }}
 <a href="{{.}}"><img class="icon-social" src="/img/twitter.svg" alt="Twitter"/></a>
 {{ end }}
-{{ with .OutputFormats.Get "RSS" }}
-  <a href="{{ .RelPermalink }}">RSS</a>
+{{ with .OutputFormats.Get "rss" }}
+  <a href="{{ .RelPermalink }}"><img class="icon-social" src="/img/feed.svg" alt="Feed"></a>
 {{ end }}
 {{ with .Site.Params.Twitch}}
 <a href="{{.}}"><img class="icon-social" src="/img/twitch.svg" alt="Twitch"/></a>
