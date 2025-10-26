@@ -31,31 +31,28 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/gohugoio/hugo:v0.148.2
+    env:
+      IMAGE_NAME: haytok.github.io:latest
     steps:
-      - name: Install Dart Sass
-        run: sudo snap install dart-sass
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 0
+      - name: Build Docker image
+        run: |
+          docker build -t ${IMAGE_NAME} .
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
       - name: Install Node.js dependencies
         run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
       - name: Build with Hugo
-        env:
-          HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
-          HUGO_ENVIRONMENT: production
-          TZ: America/Los_Angeles
         run: |
-          hugo \
-            --gc \
-            --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"
+          docker run --rm \
+            -v "${{ github.workspace }}:/src" \
+            -w /src \
+            -u $(id -u):$(id -g) \
+            -e HUGO_CACHEDIR=/tmp/hugo_cache \
+            ${IMAGE_NAME} \
+            --gc --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

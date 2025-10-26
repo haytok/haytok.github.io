@@ -1,0 +1,49 @@
+name: Test Hugo Server on Dependabot PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  hugo-server-test:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: haytok.github.io:latest
+      CONTAINER_NAME: haytok.github.io
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${IMAGE_NAME} .
+
+      - name: Build Hugo Docker image
+        run: make build-image
+
+      - name: Start Hugo server
+        run: |
+          make server &
+          echo "Waiting for server to start..."
+          for i in {1..15}; do
+            if curl -s http://localhost:1313 > /dev/null; then
+              echo "Server is up!"
+              break
+            fi
+            sleep 2
+          done
+
+      - name: Test server response
+        run: |
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:1313)
+          echo "HTTP code: $HTTP_CODE"
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "Hugo server did not return 200"
+            exit 1
+          fi
+
+      - name: Stop Hugo server
+        run: |
+          docker ps -q --filter "name=$(CONTAINER_NAME)" | xargs -r docker stop
