@@ -20,8 +20,9 @@ Also, as a Cloud Support Engineer at AWS, I specialize in container-related serv
 
 - [fix: allow to propagate the address specified in -p option by haytok · Pull Request #477 · rootless-containers/rootlesskit](https://github.com/rootless-containers/rootlesskit/pull/477)
 
-#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (23)
+#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (24)
 
+- [docs/command-reference.md: fix nerdctl namespace anchors without blue… by haytok · Pull Request #4633 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4633)
 - [fix: sort results of `nerdctl ps` and `nerdctl compose ps` alphabetic… by haytok · Pull Request #4628 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4628)
 - [fix: make PORTS in nerdctl ps or nerdctl compose ps easier to view by haytok · Pull Request #4602 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4602)
 - [fix: allow storing additional network info in network-config.json by haytok · Pull Request #4385 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4385)
