@@ -72,7 +72,7 @@ Also, as a Cloud Support Engineer at AWS, I specialize in container-related serv
 
 ## WORK EXPERIENCE
 
-- **August 2023 ~ Present** : **Cloud Support Engineer at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)**
+- **August 2023 ~ December 2025** : **Cloud Support Engineer at [Amazon Web Services Japan GK](https://aws.amazon.com/jp/)**
   - When AWS Support receive customer inquiries, I reproduce the problem, identify the root cause, and provide the solutions. 
   - I primarily provide technical support for products such as `Amazon ECS`, `Amazon EKS`, `AWS Fargate`, and `AWS CloudFormation`.
   - Previously, I provided technical support for products such as `RDS for MySQL` and `Aurora MySQL`.
