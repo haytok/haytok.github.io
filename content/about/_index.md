@@ -20,8 +20,9 @@ Also, as a Cloud Support Engineer at AWS, I specialize in container-related serv
 
 - [fix: allow to propagate the address specified in -p option by haytok · Pull Request #477 · rootless-containers/rootlesskit](https://github.com/rootless-containers/rootlesskit/pull/477)
 
-#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (26)
+#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (27)
 
+- [test: refactor compose_up_linux_test.go to use Tigron by haytok · Pull Request #4654 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4654)
 - [docs: add additional nerdtest `Requirement` by haytok · Pull Request #4652 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4652)
 - [fix: support tmpfs long syntax in compose volumes by haytok · Pull Request #4637 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4637)
 - [docs/command-reference.md: fix nerdctl namespace anchors without blue… by haytok · Pull Request #4633 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4633)
