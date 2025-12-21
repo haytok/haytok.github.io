@@ -5,7 +5,7 @@ publishDir = "docs"
 canonifyurls = true
 
 # Copyright notice. Note: You can use HTML tag here
-copyright = "&copy; 2021 haytok"
+copyright = "&copy; 2025 haytok"
 pluralizeListTitles = false
 
 # Minimum number of posts before paginate navigation show up
