@@ -5,8 +5,7 @@ date = "2021-04-30T00:00:00+08:00"
 
 ## Profile
 
-I'm really passionate about container technologies, actively contributing to the OSS related to containers. I recently contribute to [nerdctl](https://github.com/containerd/nerdctl) in [the containerd project](https://github.com/containerd/), and I'm a maintainer of [Finch](https://github.com/runfinch/finch).
-Also, as a Cloud Support Engineer at AWS, I specialize in container-related services including [Amazon ECS](https://aws.amazon.com/ecs/), [Amazon EKS](https://aws.amazon.com/eks/), and [AWS Fargate](https://aws.amazon.com/fargate/), providing technical expertise to customers. 
+I'm really passionate about container technologies, actively contributing to the OSS related to containers. I recently contribute to [nerdctl](https://github.com/containerd/nerdctl) in [the containerd project](https://github.com/containerd/). Now I'm a maintainer (reviewer) of [nerdctl](https://github.com/containerd/nerdctl). Previously, I was a maintainer of [Finch](https://github.com/runfinch/finch).
 
 ## EXPERIENCE
 
@@ -20,8 +19,11 @@ Also, as a Cloud Support Engineer at AWS, I specialize in container-related serv
 
 - [fix: allow to propagate the address specified in -p option by haytok · Pull Request #477 · rootless-containers/rootlesskit](https://github.com/rootless-containers/rootlesskit/pull/477)
 
-#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (28)
+#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (32)
 
+- [test: refactor compose_kill_linux_test.go to use Tigron by haytok · Pull Request #4676 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4676)
+- [test: refactor compose_down_linux_test.go to use Tigron by haytok · Pull Request #4672 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4672)
+- [test: refactor compose_create_linux_test.go to use Tigron by haytok · Pull Request #4670 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4670)
 - [chore: improve the visibility of orphaned containers in logs by haytok · Pull Request #4671 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4671)
 - [test: refactor compose_up_linux_test.go to use Tigron by haytok · Pull Request #4654 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4654)
 - [docs: add additional nerdtest `Requirement` by haytok · Pull Request #4652 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4652)
