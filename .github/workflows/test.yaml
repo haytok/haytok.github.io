@@ -28,7 +28,7 @@ jobs:
             -p 1313:1313 \
             ${IMAGE_NAME} server --bind 0.0.0.0 --renderToMemory  --noBuildLock
           echo "Waiting for server to start..."
-          for i in {1..15}; do
+          for i in {1..5}; do
             if curl -s http://localhost:1313 > /dev/null; then
               echo "Server is up!"
               break
@@ -36,13 +36,6 @@ jobs:
             echo "Attempt $i: Server not ready yet..."
             sleep 2
           done
-
-      - name: Debug
-        run: |
-          pwd
-          ls
-          docker ps -a
-          docker logs ${CONTAINER_NAME}
 
       - name: Test server response
         run: |
