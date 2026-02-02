@@ -22,7 +22,7 @@ jobs:
 
       - name: Start Hugo server
         run: |
-          docker run --rm -d \
+          docker run -d \
             --name ${CONTAINER_NAME} \
             -v $(pwd):/project \
             -p 1313:1313 \
