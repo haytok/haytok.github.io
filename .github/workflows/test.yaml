@@ -20,18 +20,20 @@ jobs:
         run: |
           docker build -t ${IMAGE_NAME} .
 
-      - name: Build Hugo Docker image
-        run: make build-image
-
       - name: Start Hugo server
         run: |
-          make server &
+          docker run --rm -d \
+            --name ${CONTAINER_NAME} \
+            -v $(pwd):/project \
+            -p 1313:1313 \
+            ${IMAGE_NAME} server --bind 0.0.0.0
           echo "Waiting for server to start..."
           for i in {1..15}; do
             if curl -s http://localhost:1313 > /dev/null; then
               echo "Server is up!"
               break
             fi
+            echo "Attempt $i: Server not ready yet..."
             sleep 2
           done
 
@@ -41,9 +43,11 @@ jobs:
           echo "HTTP code: $HTTP_CODE"
           if [ "$HTTP_CODE" -ne 200 ]; then
             echo "Hugo server did not return 200"
+            docker logs ${CONTAINER_NAME} || true
             exit 1
           fi
 
       - name: Stop Hugo server
+        if: always()
         run: |
-          docker ps -q --filter "name=$(CONTAINER_NAME)" | xargs -r docker stop
+          docker stop ${CONTAINER_NAME} || true
