@@ -24,7 +24,7 @@ jobs:
         run: |
           docker run --rm -d \
             --name ${CONTAINER_NAME} \
-            -v $(pwd):/project \
+            -v $(pwd):/src \
             -p 1313:1313 \
             ${IMAGE_NAME} server --bind 0.0.0.0
           echo "Waiting for server to start..."
@@ -36,6 +36,13 @@ jobs:
             echo "Attempt $i: Server not ready yet..."
             sleep 2
           done
+
+      - name: Debug
+        run: |
+          pwd
+          ls
+          docker ps -a
+          docker logs ${CONTAINER_NAME}
 
       - name: Test server response
         run: |
