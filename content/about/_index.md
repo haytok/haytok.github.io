@@ -19,8 +19,9 @@ I'm really passionate about container technologies, actively contributing to the
 
 - [fix: allow to propagate the address specified in -p option by haytok · Pull Request #477 · rootless-containers/rootlesskit](https://github.com/rootless-containers/rootlesskit/pull/477)
 
-#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (34)
+#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (35)
 
+- [fix: add missing --ipc options in help text and shell completion by haytok · Pull Request #4731 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4731)
 - [test: refactor compose_pause_linux_test.go to use Tigron by haytok · Pull Request #4688 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4688)
 - [docs/command-reference.md: fix anchors without blue_square by haytok · Pull Request #4692 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4692)
 - [test: refactor compose_kill_linux_test.go to use Tigron by haytok · Pull Request #4676 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4676)
