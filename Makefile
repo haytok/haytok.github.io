@@ -4,10 +4,15 @@ PORT=1313
 
 DOCKER_CMD := $(shell command -v docker 2>/dev/null)
 FINCH_CMD  := $(shell command -v finch 2>/dev/null)
+NERDCTL_CMD  := $(shell command -v nerdctl 2>/dev/null)
 
 ifeq ($(DOCKER_CMD),)
   ifeq ($(FINCH_CMD),)
-    $(error Neither docker nor finch is available in PATH)
+    ifeq ($(NERDCTL_CMD),)
+      $(error Neither docker, finch, nor nerdctl is available in PATH)
+    else
+      CONTAINER_CMD := sudo nerdctl
+    endif
   else
     CONTAINER_CMD := finch
   endif
