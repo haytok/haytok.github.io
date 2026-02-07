@@ -11,14 +11,6 @@ I'm really passionate about container technologies, actively contributing to the
 
 ### OSS EXPERIENCE
 
-#### Contributions to [aws-cloudformation/rain](https://github.com/aws-cloudformation/rain/commits/main/?author=haytok) (1)
-
-- [fix: Update messages when deploying a changeset when importing resources by haytok · Pull Request #646 · aws-cloudformation/rain](https://github.com/aws-cloudformation/rain/pull/646)
-
-#### Contributions to [rootless-containers/rootlesskit](https://github.com/rootless-containers/rootlesskit/commits/master/?author=haytok) (1)
-
-- [fix: allow to propagate the address specified in -p option by haytok · Pull Request #477 · rootless-containers/rootlesskit](https://github.com/rootless-containers/rootlesskit/pull/477)
-
 #### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (35)
 
 - [fix: add missing --ipc options in help text and shell completion by haytok · Pull Request #4731 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4731)
@@ -51,6 +43,18 @@ I'm really passionate about container technologies, actively contributing to the
 - [fix: Allow to delete images when names of images are short digest ids… by haytok · Pull Request #3519 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3519)
 - [fix: Cleaning up orphaned directories and files when containers creat… by haytok · Pull Request #3457 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3457)
 
+{{< details summary="Other Contributions">}}
+
+<br />
+
+#### Contributions to [aws-cloudformation/rain](https://github.com/aws-cloudformation/rain/commits/main/?author=haytok) (1)
+
+- [fix: Update messages when deploying a changeset when importing resources by haytok · Pull Request #646 · aws-cloudformation/rain](https://github.com/aws-cloudformation/rain/pull/646)
+
+#### Contributions to [rootless-containers/rootlesskit](https://github.com/rootless-containers/rootlesskit/commits/master/?author=haytok) (1)
+
+- [fix: allow to propagate the address specified in -p option by haytok · Pull Request #477 · rootless-containers/rootlesskit](https://github.com/rootless-containers/rootlesskit/pull/477)
+
 #### Contributions to [runfinch/finch](https://github.com/runfinch/finch/commits?author=haytok) (11)
 
 - [fix: Allow to use the COMPOSE_FILE variable in finch compose by haytok · Pull Request #994 · runfinch/finch](https://github.com/runfinch/finch/pull/994)
@@ -78,6 +82,10 @@ I'm really passionate about container technologies, actively contributing to the
 - [docs(fix typo): fix sample commands to get alerts for policies and te… by haytok · Pull Request #1362 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1362)
 - [fix(CI): add the job to run go test on the KubeArmor/KubeArmor directory by haytok · Pull Request #1267 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1267)
 - [fix(monitor): fix UpdateNsKeyMap and DestroyBPFMaps functions by haytok · Pull Request #1264 · kubearmor/KubeArmor](https://github.com/kubearmor/KubeArmor/pull/1264)
+
+{{< /details >}}
+
+<br />
 
 ## WORK EXPERIENCE
 
