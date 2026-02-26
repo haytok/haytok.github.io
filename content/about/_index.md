@@ -11,6 +11,10 @@ I'm really passionate about container technologies, actively contributing to the
 
 ### OSS EXPERIENCE
 
+#### Contributions to [containerd/containerd](https://github.com/containerd/containerd/commits/main/?author=haytok) (1)
+
+- [fix: propagate `context deadline exceeded` error properly by haytok · Pull Request #12821 · containerd/containerd](https://github.com/containerd/containerd/pull/12821)
+
 #### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (35)
 
 - [fix: add missing --ipc options in help text and shell completion by haytok · Pull Request #4731 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4731)
