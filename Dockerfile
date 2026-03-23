@@ -1,1 +1,1 @@
-FROM ghcr.io/gohugoio/hugo:v0.157.0
+FROM ghcr.io/gohugoio/hugo:v0.158.0
