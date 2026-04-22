@@ -15,8 +15,13 @@ I'm really passionate about container technologies, actively contributing to the
 
 - [fix: propagate `context deadline exceeded` error properly by haytok · Pull Request #12821 · containerd/containerd](https://github.com/containerd/containerd/pull/12821)
 
-#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (35)
+#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (40)
 
+- [fix: clean up unused iptables chains not being deleted on container r… by haytok · Pull Request #4835 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4835)
+- [fix: clean up the directory for port-reserver pid on error in applyNe… by haytok · Pull Request #4820 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4820)
+- [test: resolve a flaky test of TestLoadStdinFromPipe by haytok · Pull Request #4818 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4818)
+- [fix: clean up port-reserver.pid and the parent dir when the container… by haytok · Pull Request #4811 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4811)
+- [test: remove a new line from containerID for correct test execution by haytok · Pull Request #4801 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4801)
 - [fix: add missing --ipc options in help text and shell completion by haytok · Pull Request #4731 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4731)
 - [test: refactor compose_pause_linux_test.go to use Tigron by haytok · Pull Request #4688 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4688)
 - [docs/command-reference.md: fix anchors without blue_square by haytok · Pull Request #4692 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4692)
