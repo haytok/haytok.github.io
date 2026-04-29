@@ -5,7 +5,7 @@ date = "2021-04-30T00:00:00+08:00"
 
 ## Profile
 
-I'm really passionate about container technologies, actively contributing to the OSS related to containers. I recently contribute to [nerdctl](https://github.com/containerd/nerdctl) in [the containerd project](https://github.com/containerd/). Now I'm a maintainer (reviewer) of [nerdctl](https://github.com/containerd/nerdctl). Previously, I was a maintainer of [Finch](https://github.com/runfinch/finch).
+I'm really passionate about container technologies, actively contributing to the OSS related to containers. I recently contribute to [nerdctl](https://github.com/containerd/nerdctl) in [the containerd project](https://github.com/containerd/). Now I'm [a maintainer (reviewer) of nerdctl](https://github.com/containerd/nerdctl/blob/main/MAINTAINERS#L26). Previously, I was a maintainer of [Finch](https://github.com/runfinch/finch).
 
 ## EXPERIENCE
 
@@ -15,42 +15,10 @@ I'm really passionate about container technologies, actively contributing to the
 
 - [fix: propagate `context deadline exceeded` error properly by haytok · Pull Request #12821 · containerd/containerd](https://github.com/containerd/containerd/pull/12821)
 
-#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl/commits/main/?author=haytok) (40)
+#### Contributions to [containerd/nerdctl](https://github.com/containerd/nerdctl) (44)
 
-- [fix: clean up unused iptables chains not being deleted on container r… by haytok · Pull Request #4835 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4835)
-- [fix: clean up the directory for port-reserver pid on error in applyNe… by haytok · Pull Request #4820 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4820)
-- [test: resolve a flaky test of TestLoadStdinFromPipe by haytok · Pull Request #4818 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4818)
-- [fix: clean up port-reserver.pid and the parent dir when the container… by haytok · Pull Request #4811 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4811)
-- [test: remove a new line from containerID for correct test execution by haytok · Pull Request #4801 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4801)
-- [fix: add missing --ipc options in help text and shell completion by haytok · Pull Request #4731 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4731)
-- [test: refactor compose_pause_linux_test.go to use Tigron by haytok · Pull Request #4688 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4688)
-- [docs/command-reference.md: fix anchors without blue_square by haytok · Pull Request #4692 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4692)
-- [test: refactor compose_kill_linux_test.go to use Tigron by haytok · Pull Request #4676 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4676)
-- [test: refactor compose_down_linux_test.go to use Tigron by haytok · Pull Request #4672 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4672)
-- [test: refactor compose_create_linux_test.go to use Tigron by haytok · Pull Request #4670 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4670)
-- [chore: improve the visibility of orphaned containers in logs by haytok · Pull Request #4671 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4671)
-- [test: refactor compose_up_linux_test.go to use Tigron by haytok · Pull Request #4654 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4654)
-- [docs: add additional nerdtest `Requirement` by haytok · Pull Request #4652 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4652)
-- [fix: support tmpfs long syntax in compose volumes by haytok · Pull Request #4637 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4637)
-- [docs/command-reference.md: fix nerdctl namespace anchors without blue… by haytok · Pull Request #4633 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4633)
-- [fix: sort results of `nerdctl ps` and `nerdctl compose ps` alphabetic… by haytok · Pull Request #4628 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4628)
-- [fix: make PORTS in nerdctl ps or nerdctl compose ps easier to view by haytok · Pull Request #4602 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4602)
-- [fix: allow storing additional network info in network-config.json by haytok · Pull Request #4385 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4385)
-- [fix: allow containers to start using a large numbers of ports by haytok · Pull Request #4290 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4290)
-- [test: refactor TestNetworkInspect in network_inspect_test.go by haytok · Pull Request #4310 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4310)
-- [fix: display containers belonging to multiple networks in nerdctl network inspect by haytok · Pull Request #4309 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4309)
-- [test: update test functions in portutil_test.go by haytok · Pull Request #4273 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4273)
-- [test: refactor TestTestParseFlagPWithPlatformSpec and TestParsePortsL… by haytok · Pull Request #4263 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4263)
-- [test: update test logic in TestTestParseFlagPWithPlatformSpec by haytok · Pull Request #4261 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4261)
-- [test: update test logic in TestParsePortsLabel by haytok · Pull Request #4260 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/4260)
-- [Fix port forwarding not working for non-127.0.0.1 localhost in rootless by haytok · Pull Request #3831 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3831)
-- [fix: save multiple images for the same image id to a tar archive by haytok · Pull Request #3822 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3822)
-- [fix: clean up an orphaned etchosts directory for the container that failed to create by haytok · Pull Request #3819 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3819)
-- [add fields such as CONTAINER_NAME to journald log entries sent to by containers by haytok · Pull Request #3667 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3667)
-- [fix: not to be deleted a container created with --rm when detaching by haytok · Pull Request #3614 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3614)
-- [fix: Allow to untag images associated with running or paused containe… by haytok · Pull Request #3602 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3602)
-- [fix: Allow to delete images when names of images are short digest ids… by haytok · Pull Request #3519 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3519)
-- [fix: Cleaning up orphaned directories and files when containers creat… by haytok · Pull Request #3457 · containerd/nerdctl](https://github.com/containerd/nerdctl/pull/3457)
+- [Commits](https://github.com/containerd/nerdctl/commits/main/?author=haytok)
+- [Issues and PRs](https://github.com/containerd/nerdctl/issues?q=involves%3Ahaytok)
 
 {{< details summary="Other Contributions">}}
 
