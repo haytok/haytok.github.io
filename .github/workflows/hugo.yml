@@ -6,10 +6,7 @@ on:
       - main
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+permissions: {}
 
 concurrency:
   group: "pages"
@@ -18,6 +15,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: read
     timeout-minutes: 10
     env:
       IMAGE_NAME: haytok.github.io:latest
@@ -50,6 +49,9 @@ jobs:
 
   deploy:
     runs-on: ubuntu-24.04-arm
+    permissions:
+      pages: write
+      id-token: write
     needs: build
     timeout-minutes: 10
     environment:
