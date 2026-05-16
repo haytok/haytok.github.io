@@ -8,7 +8,7 @@ on:
 jobs:
   hugo-server-test:
     if: github.actor == 'dependabot[bot]'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     env:
       IMAGE_NAME: haytok.github.io:latest
       CONTAINER_NAME: haytok.github.io
